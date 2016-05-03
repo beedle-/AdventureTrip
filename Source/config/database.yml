@@ -14,9 +14,9 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password: toor
+  password: 1234
   host: localhost
-  port: 3306
+  port: 8889
 
 development:
   <<: *default
@@ -50,6 +50,6 @@ test:
 #
 production:
   <<: *default
-  database: roadtrip
+  database: roadtrip5
   username: roadtrip
   password: <%= ENV['ROADTRIP_DATABASE_PASSWORD'] %>

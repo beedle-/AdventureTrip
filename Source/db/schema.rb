@@ -16,6 +16,25 @@ ActiveRecord::Schema.define(version: 20160419160232) do
   create_table "comments", force: :cascade do |t|
     t.text    "text",    limit: 4294967295, null: false
     t.integer "trip_id", limit: 4,          null: false
+    t.integer "user_id", limit: 4,          null: false
+  end
+
+  create_table "permission_types", force: :cascade do |t|
+    t.string "permission", limit: 255, null: false
+  end
+
+  create_table "permissions", force: :cascade do |t|
+    t.integer "user_id",            limit: 4, null: false
+    t.integer "trip_id",            limit: 4, null: false
+    t.integer "permission_type_id", limit: 4, null: false
+  end
+
+  create_table "stops", force: :cascade do |t|
+    t.string  "title",    limit: 255, null: false
+    t.integer "loc_lon",  limit: 4,   null: false
+    t.integer "loc_lat",  limit: 4,   null: false
+    t.integer "trip_id",  limit: 4,   null: false
+    t.integer "etape_nb", limit: 4,   null: false
   end
 
   create_table "transports", force: :cascade do |t|
