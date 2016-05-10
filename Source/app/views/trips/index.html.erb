@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Trips</h1>
+
+<table class="tripTable">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Public</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Transport</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @trips.each do |trip| %>
+      <tr>
+        <td><%= trip.title %></td>
+        <td><%= trip.description %></td>
+        <td><%= trip.public %></td>
+        <td><%= trip.start_date.strftime("%d.%m.%y %H:%M") %></td>
+        <td><%= trip.end_date.strftime("%d.%m.%y %H:%M") %></td>
+        <td><%= trip.transport.transports %></td>
+        <td><%= link_to 'Show', trip %> <%= link_to 'Edit', edit_trip_path(trip) %> <%= link_to 'Destroy', trip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Trip', new_trip_path %><br/>
+<%= link_to "Home", root_path %>

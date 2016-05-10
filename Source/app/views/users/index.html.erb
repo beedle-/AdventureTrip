@@ -2,3 +2,9 @@
 
 <h1>Adventure Trip</h1>
 <p>Hello dear visitor</p>
+
+<%= link_to "Take a look at the existing trips...", trips_path %>
+
+<% if user_signed_in? %>
+    <br/><%= link_to "Create a new trip!", new_trip_path %>
+<% end %>
