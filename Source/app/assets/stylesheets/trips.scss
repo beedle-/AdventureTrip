@@ -3,8 +3,8 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .tripTable {
     border: 1px solid black;
-}
 
-.tripTable td {
-    padding: 0 20px;
+    & td {
+        padding: 0 20px;
+    }
 }

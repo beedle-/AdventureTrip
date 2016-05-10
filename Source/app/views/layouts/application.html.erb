@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div id='user_nav'>
+<!--<div id='user_nav'>
   <% if user_signed_in? %>
       Vous êtes connecté en tant que <%= current_user.email %>
       <%= link_to "Déconnexion", destroy_user_session_path, :method => :delete %>
@@ -16,7 +16,7 @@
   <% else %>
       <%= link_to "Connexion", new_user_session_path %>
   <% end %>
-</div>
+</div>-->
 
 <%= yield %>
 

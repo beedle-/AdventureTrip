@@ -1,3 +1,41 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+    margin: 0;
+}
+
+.homePanel {
+    height: 100vh;
+    width: 100%;
+}
+
+.homeImage {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.helper {
+    display: inline-block;
+    height: 50%;
+    vertical-align: middle;
+}
+
+.homeTitle {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    vertical-align: middle;
+    width: 30%;
+}
+
+.getStartedButton {
+    bottom: 5em;
+    font-size: 1.5em;
+    left: 0;
+    margin-left: 50%;
+    padding: 6px 1em;
+    position: absolute;
+    transform: translateX(-50%);
+}
