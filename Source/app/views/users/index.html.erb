@@ -1,18 +1,27 @@
+<script>
+    function test() {
+        $('html, body').animate({
+            scrollTop: $("#homeBottom").offset().top
+        }, 1000);
+    }
+</script>
+
 <div class="homePanel">
     <%= image_tag("home.jpg", :alt => "Home page's image", :class => "homeImage") %>
     <span class="helper"></span>
     <%= image_tag("title.png", :alt => "Title", :class => "homeTitle") %>
-    <button class="btn btn-primary getStartedButton">Get Started!</button>
+    <button class="btn btn-primary getStartedButton" onClick="test()">Get Started!</button>
 </div>
 
+<div class="homeBottom" id="homeBottom">
+    <p id="notice"><%= notice %></p>
 
-<p id="notice"><%= notice %></p>
+    <h1>Adventure Trip</h1>
+    <p>Hello dear visitor</p>
 
-<h1>Adventure Trip</h1>
-<p>Hello dear visitor</p>
+    <%= link_to "Take a look at the existing trips...", trips_path %>
 
-<%= link_to "Take a look at the existing trips...", trips_path %>
-
-<% if user_signed_in? %>
-    <br/><%= link_to "Create a new trip!", new_trip_path %>
-<% end %>
+    <% if user_signed_in? %>
+        <br/><%= link_to "Create a new trip!", new_trip_path %>
+    <% end %>
+</div>

@@ -2,6 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@font-face {
+    font-family: roadTrip;
+    src: url(RoadTrip.ttf);
+}
+
 body {
     margin: 0;
 }
@@ -13,7 +18,9 @@ body {
 
 .homeImage {
     height: 100%;
+    left: 0;
     position: absolute;
+    top: 0;
     width: 100%;
 }
 
@@ -38,4 +45,12 @@ body {
     padding: 6px 1em;
     position: absolute;
     transform: translateX(-50%);
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.homeBottom {
+    height: 100vh;
 }
