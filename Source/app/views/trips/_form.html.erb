@@ -33,7 +33,7 @@
   </div>
   <div class="field">
     <%= f.label "Transport" %><br>
-    <%= f.collection_select :transport_id, @transports, :id, :transports %>
+    <%= f.collection_select :transport_id, @transports, :id, :name %>
   </div>
 
   <div class="field">

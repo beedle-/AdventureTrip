@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20160508155643) do
   end
 
   create_table "transports", force: :cascade do |t|
-    t.string "transports", limit: 255, null: false
+    t.string "name", limit: 255, null: false
   end
 
   create_table "trips", force: :cascade do |t|
