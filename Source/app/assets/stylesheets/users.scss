@@ -2,16 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@font-face {
-    font-family: roadTrip;
-    src: url(RoadTrip.ttf);
-}
-
-body {
-    margin: 0;
-}
-
-.homePanel {
+.homeTop {
     height: 100vh;
     width: 100%;
 }
@@ -39,6 +30,7 @@ body {
 
 .getStartedButton {
     bottom: 5em;
+    box-shadow: 0px 0px 3px black;
     font-size: 1.5em;
     left: 0;
     margin-left: 50%;
@@ -52,5 +44,26 @@ body {
 }
 
 .homeBottom {
+    background-color: #337ab7;
     height: 100vh;
+}
+
+.homePanel {
+    background-color: white;
+    box-shadow: 0 0 4px;
+    height: 100%;
+    margin-left: 50%;
+    min-width: 800px;
+    padding: 5em;
+    transform: translateX(-50%);
+    width: 70%;
+}
+
+.footer {
+    border-top: 1px solid black;
+    bottom: 0;
+    left: 0;
+    padding: 1em;
+    position: absolute;
+    width: 100%;
 }

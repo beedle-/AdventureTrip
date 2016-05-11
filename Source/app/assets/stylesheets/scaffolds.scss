@@ -1,7 +1,12 @@
+@font-face {
+   font-family: raleway;
+   src: url(Raleway-Medium.ttf);
+}
+
 body {
   background-color: #fff;
   color: #333;
-  font-family: verdana, arial, helvetica, sans-serif;
+  font-family: raleway, verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
 }
