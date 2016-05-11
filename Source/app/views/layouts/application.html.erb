@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Adventure Trip!</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+    <head>
+        <title>Adventure Trip!</title>
+        <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+        <%= csrf_meta_tags %>
+    </head>
+    <body>
+        <!--<div id='user_nav'>
+          <% if user_signed_in? %>
+              Vous êtes connecté en tant que <%= current_user.email %>
+              <%= link_to "Déconnexion", destroy_user_session_path, :method => :delete %>
+              <%= link_to "Modifiez vos données", edit_user_registration_path %>
+          <% else %>
+              <%= link_to "Connexion", new_user_session_path %>
+          <% end %>
+        </div>-->
 
-<!--<div id='user_nav'>
-  <% if user_signed_in? %>
-      Vous êtes connecté en tant que <%= current_user.email %>
-      <%= link_to "Déconnexion", destroy_user_session_path, :method => :delete %>
-      <%= link_to "Modifiez vos données", edit_user_registration_path %>
-  <% else %>
-      <%= link_to "Connexion", new_user_session_path %>
-  <% end %>
-</div>-->
-
-<%= yield %>
-
-</body>
+        <%= yield %>
+    </body>
 </html>

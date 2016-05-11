@@ -6,15 +6,26 @@
     }
 </script>
 
-<div class="homeTop">
-    <%= image_tag("home.jpg", :alt => "Home page's image", :class => "homeImage") %>
-    <span class="helper"></span>
-    <%= image_tag("title.png", :alt => "Title", :class => "homeTitle") %>
-    <button class="btn btn-primary getStartedButton" onClick="slidePage()">Get Started!</button>
-</div>
+<% if !user_signed_in? %>
+    <div class="homeTop">
+        <div class="homeHeader">
+            Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "homeHeaderLink" %>
+            or <%= link_to "Register", new_user_registration_path, :class => "homeHeaderLink" %>
+        </div>
+
+        <span class="helper"></span>
+        <%= image_tag("title.png", :alt => "Title", :class => "homeTitle") %>
+        <button class="btn btn-primary getStartedButton" onClick="slidePage()">Get Started!</button>
+    </div>
+<% end %>
 
 <div class="homeBottom" id="homeBottom">
     <div class="homePanel">
+        <div class="header">
+            Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>
+            or <%= link_to "Register", new_user_registration_path, :class => "headerLink" %>
+        </div>
+
         <p id="notice"><%= notice %></p>
 
         <h1>Adventure Trip</h1>
@@ -26,7 +37,8 @@
             <br/><%= link_to "Create a new trip!", new_trip_path %>
         <% end %>
         <div class="footer">
-            Adventure Trip! &copy; 2016. All Rights Reserved.
+            <span class="copyright">Adventure Trip! &copy; 2016. All Rights Reserved.</span>
+            <a class="aboutLink" href="#">About</a>
         </div>
     </div>
 </div>

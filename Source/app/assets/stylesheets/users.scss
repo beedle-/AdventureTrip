@@ -2,9 +2,35 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$footer-height: 44px;
+
 .homeTop {
+    //background: rgba(0, 0, 0, 0) url(home.jpg) no-repeat fixed center 0 / cover;
+    background: rgba(0, 0, 0, 0) url(home.jpg) no-repeat center 0 / cover;
     height: 100vh;
     width: 100%;
+}
+
+.header-base {
+    height: 2.5em;
+    padding: 5px 8px;
+    width: 100%;
+}
+
+.homeHeader {
+    @extend .header-base;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    color: white;
+    text-align: right;
+}
+
+.homeHeaderLink {
+    color: white;
+    font-weight: bold;
+
+    &:hover, &:active {
+        color: white;
+    }
 }
 
 .homeImage {
@@ -54,16 +80,44 @@
     height: 100%;
     margin-left: 50%;
     min-width: 800px;
-    padding: 5em;
+    padding: 5em 5em calc(#{$footer-height} + 2em) 5em;
     transform: translateX(-50%);
     width: 70%;
 }
 
+.header {
+    @extend .header-base;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+.headerLink {
+    color: black;
+    font-weight: bold;
+
+    &:hover, &:active {
+        color: black;
+    }
+}
+
 .footer {
-    border-top: 1px solid black;
+    background-color: #286090;
     bottom: 0;
+    color: white;
+    height: $footer-height;
     left: 0;
     padding: 1em;
     position: absolute;
     width: 100%;
+}
+
+.copyright {
+    float: left;
+}
+
+.aboutLink {
+    color: white !important;
+    float: right;
+    text-decoration: underline;
 }
