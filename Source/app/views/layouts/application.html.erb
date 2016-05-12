@@ -7,16 +7,42 @@
         <%= csrf_meta_tags %>
     </head>
     <body>
-        <!--<div id='user_nav'>
-          <% if user_signed_in? %>
-              Vous êtes connecté en tant que <%= current_user.email %>
-              <%= link_to "Déconnexion", destroy_user_session_path, :method => :delete %>
-              <%= link_to "Modifiez vos données", edit_user_registration_path %>
-          <% else %>
-              <%= link_to "Connexion", new_user_session_path %>
-          <% end %>
-        </div>-->
+        <% if params[:controller] == "users" && params[:action] == "index" && !user_signed_in? %>
+            <div class="homeTop">
+                <div class="homeHeader">
+                    Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "homeHeaderLink" %>
+                    or <%= link_to "Register", new_user_registration_path, :class => "homeHeaderLink" %>
+                </div>
 
-        <%= yield %>
+                <span class="helper"></span>
+                <%= image_tag("title.png", :alt => "Title", :class => "homeTitle") %>
+                <button class="btn btn-primary getStartedButton" onClick="slidePage()">Get Started!</button>
+            </div>
+        <% end %>
+
+        <div class="mainContainer" id="mainContainer">
+            <div class="header">
+                <%= link_to "Adventure Trip!", root_path, :class => "title" %>
+                <span class="userInfos">
+                    <% if user_signed_in? %>
+                        You are connected as <%= current_user.email %>
+                        <%= link_to "Disconnect", destroy_user_session_path, :method => :delete %>
+                        <%= link_to "My Account", edit_user_registration_path %>
+                    <% else %>
+                        Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>
+                        or <%= link_to "Register", new_user_registration_path, :class => "headerLink" %>
+                    <% end %>
+                </span>
+            </div>
+
+            <div class="contentPanel">
+                <%= yield %>
+
+                <div class="footer">
+                    <span class="copyright">Adventure Trip! &copy; 2016. All Rights Reserved.</span>
+                    <a class="aboutLink" href="#">About</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

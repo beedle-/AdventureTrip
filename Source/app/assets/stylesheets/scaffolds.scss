@@ -1,6 +1,90 @@
+$blue: #337ab7;
+$dark-blue: #286090;
+$footer-height: 44px;
+
+// ================================== LAYOUT ==================================
+@font-face {
+   font-family: roadTrip;
+   src: url(RoadTrip.ttf);
+}
+
 @font-face {
    font-family: raleway;
    src: url(Raleway-Medium.ttf);
+}
+
+.mainContainer {
+    background-color: #337ab7;
+    min-height: 100vh;
+    position: relative;
+}
+
+.header {
+    background-color: white;
+    margin-left: 50%;
+    min-width: 800px;
+    padding: 1.5em 2em 1em;
+    position: sticky;
+    top: 0;
+    transform: translateX(-50%);
+    width: 70%;
+    z-index: 10;
+}
+
+.headerLink {
+    color: black;
+    font-weight: bold;
+
+    &:hover, &:active {
+        color: black;
+    }
+}
+
+.title {
+    color: $dark-blue;
+    font-family: RoadTrip;
+    font-size: 3em;
+
+    &:hover, &:focus, &:active {
+        outline: 0;
+        text-decoration: none;
+    }
+}
+
+.userInfos {
+    float: right;
+}
+
+.contentPanel {
+    background-color: white;
+    box-shadow: 0 0 4px;
+    height: 100%;
+    margin-left: 50%;
+    min-width: 800px;
+    padding: 5em 5em calc(#{$footer-height} + 2em) 5em;
+    transform: translateX(-50%);
+    width: 70%;
+}
+
+.footer {
+    background-color: $dark-blue;
+    bottom: 0;
+    color: white;
+    height: $footer-height;
+    left: 0;
+    padding: 1em;
+    position: absolute;
+    width: 100%;
+}
+
+.copyright {
+    float: left;
+}
+
+.aboutLink {
+    color: white !important;
+    float: right;
+    text-decoration: underline;
 }
 
 body {
@@ -9,6 +93,14 @@ body {
   font-family: raleway, verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
+}
+
+a {
+    color: $blue;
+
+    &:hover, &:active {
+        color: $dark-blue;
+    }
 }
 
 p, ol, ul, td {
@@ -62,4 +154,66 @@ div {
     font-size: 12px;
     list-style: square;
   }
+}
+
+// ================================= HOME PAGE =================================
+.homeTop {
+    //background: rgba(0, 0, 0, 0) url(home1.jpg) no-repeat fixed center 0 / cover;
+    background: rgba(0, 0, 0, 0) url(home1.jpg) no-repeat center 0 / cover;
+    height: 100vh;
+    width: 100%;
+}
+
+.homeHeader {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    color: white;
+    height: 2.5em;
+    padding: 5px 8px;
+    text-align: right;
+    width: 100%;
+}
+
+.homeHeaderLink {
+    color: white;
+    font-weight: bold;
+
+    &:hover, &:active {
+        color: white;
+    }
+}
+
+.homeImage {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.helper {
+    display: inline-block;
+    height: 50%;
+    vertical-align: middle;
+}
+
+.homeTitle {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    vertical-align: middle;
+    width: 30%;
+}
+
+.getStartedButton {
+    bottom: 5em;
+    box-shadow: 0px 0px 1px black;
+    font-size: 1.5em;
+    left: 0;
+    margin-left: 50%;
+    padding: 6px 1em;
+    position: absolute;
+    transform: translateX(-50%);
+
+    &:focus {
+        outline: 0;
+    }
 }
