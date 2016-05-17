@@ -14,13 +14,14 @@ $footer-height: 44px;
 }
 
 .mainContainer {
-    background-color: #337ab7;
+    background-color: $blue;
     min-height: 100vh;
     position: relative;
 }
 
 .header {
     background-color: white;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
     margin-left: 50%;
     min-width: 800px;
     padding: 1.5em 2em 1em;
@@ -182,14 +183,6 @@ div {
     }
 }
 
-.homeImage {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
 .helper {
     display: inline-block;
     height: 50%;
@@ -213,7 +206,7 @@ div {
     position: absolute;
     transform: translateX(-50%);
 
-    &:focus {
+    &:active, &:focus {
         outline: 0;
     }
 }
