@@ -30,5 +30,24 @@
   <%= @trip.transport_id %>
 </p>
 
+<p>
+  <strong>Commentaires:</strong>
+</p>
+
+<ul id="comments">
+  <% @comments.each do |comment| %>
+    <li> <%= comment.text %> </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= form_for(@comment,:remote => true) do |f| %>
+    <strong> Ajouter un commentaire:</strong> <%= f.text_field :text %> <br>
+    <%= f.hidden_field :user_id, :value => current_user.id %>
+    <%= f.hidden_field :trip_id, :value => @trip.id %>
+    <%= f.submit "Créer" %>
+  <% end %>
+</p>
+
 <%= link_to 'Edit', edit_trip_path(@trip) %> |
 <%= link_to 'Back', trips_path %>
