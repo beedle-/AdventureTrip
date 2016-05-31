@@ -8,3 +8,32 @@
         padding: 0 20px;
     }
 }
+
+.trip-stops {
+    width: 100%;
+}
+
+.stops {
+    border: 1px solid black;
+    float: left;
+    height: 500px;
+    overflow: auto;
+    padding: 1em;
+    width: 30%;
+}
+
+.stopsOptions {
+    display: none;
+}
+
+.calculateRoute {
+    display: none;
+    margin-top: 30px;
+}
+
+.map {
+    border: 1px solid black;
+    float: left;
+    height: 500px;
+    width: 70%;
+}
