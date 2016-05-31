@@ -1,6 +1,20 @@
 // Place all the styles related to the Trips controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$map-height: 500px;
+
+.tab-content {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #ddd #ddd;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05);
+    padding: 1vh 1vw 3vh 1vw;
+}
+
 .tripTable {
     border: 1px solid black;
 
@@ -10,13 +24,14 @@
 }
 
 .trip-stops {
+    height: $map-height;
     width: 100%;
 }
 
 .stops {
     border: 1px solid black;
     float: left;
-    height: 500px;
+    height: $map-height;
     overflow: auto;
     padding: 1em;
     width: 30%;
@@ -34,6 +49,6 @@
 .map {
     border: 1px solid black;
     float: left;
-    height: 500px;
+    height: $map-height;
     width: 70%;
 }

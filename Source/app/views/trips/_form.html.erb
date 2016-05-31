@@ -11,39 +11,84 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :public %><br>
-    <%= f.check_box :public %>
-  </div>
-  <div class="field">
-    <%= f.label :start_date %><br>
-    <%= f.datetime_select :start_date %>
-  </div>
-  <div class="field">
-    <%= f.label :end_date %><br>
-    <%= f.datetime_select :end_date %>
-  </div>
-  <div class="field">
-    <%= f.label "Transport" %><br>
-    <%= f.collection_select :transport_id, @transports, :id, :name %>
-  </div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" id="tripTabs" role="tablist">
+    <li role="presentation" class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
+    <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab">Route</a></li>
+    <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
+    <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
+    <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
+    <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
+  </ul>
 
-  <div class="field">
-    <%= f.label "Users" %><br>
-    <select name="users[]" multiple>
-        <%= @users.each do |user| %>
-            <option value="<%= user.id %>"><%= user.email %></option>
-        <% end %>
-    </select>
-  </div>
+  <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="summary">
+            <div class="field">
+              <%= f.label :title %><br>
+              <%= f.text_field :title %>
+            </div>
+            <div class="field">
+              <%= f.label :description %><br>
+              <%= f.text_area :description %>
+            </div>
+            <div class="field">
+              <%= f.label :public %><br>
+              <%= f.check_box :public %>
+            </div>
+            <div class="field">
+              <%= f.label :start_date %><br>
+              <%= f.datetime_select :start_date %>
+            </div>
+            <div class="field">
+              <%= f.label :end_date %><br>
+              <%= f.datetime_select :end_date %>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="route">
+            <div class="field">
+              <%= f.label "Transport" %><br>
+              <%= f.collection_select :transport_id, @transports, :id, :name %>
+            </div>
+            <div class="trip-stops">
+                <div class="stops">
+                    <h4><strong>Stops</strong></h4>
+                    <div id="stops-instructions">First select the start of your trip by clicking on the map to the right.</div>
+                    <div class="stopsOptions" id="stopsOptions">
+                        <button class="removeLastStop" onclick="removeLastStop()">Remove last stop</button><br/>
+                        <input id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
+                    </div>
+
+                    <button class="calculateRoute" id="calculateRoute" onclick="calcRoute()">Calculate route...</button><br/>
+                </div>
+                <div class="map" id="map"></div>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="participants">
+            <div class="field">
+              <%= f.label "Users" %><br>
+              <select name="users[]" multiple>
+                  <%= @users.each do |user| %>
+                      <option value="<%= user.id %>"><%= user.email %></option>
+                  <% end %>
+              </select>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="costs">
+            ...
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="packing">
+            ...
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="comments">
+            ...
+        </div>
+    </div>
 
   <br/>
 

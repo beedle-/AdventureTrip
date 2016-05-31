@@ -7,19 +7,5 @@
 
 <%= render 'form' %>
 
-<div class="trip-stops">
-    <div class="stops">
-        <h4><strong>Stops</strong></h4>
-        <div id="stops-instructions">First select the start of your trip by clicking on the map to the right.</div>
-        <div class="stopsOptions" id="stopsOptions">
-            <button class="removeLastStop" onclick="removeLastStop()">Remove last stop</button><br/>
-            <input id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
-        </div>
-
-        <button class="calculateRoute" id="calculateRoute" onclick="calcRoute()">Calculate route...</button><br/>
-    </div>
-    <div class="map" id="map"></div>
-</div>
-
 <%= link_to 'Show', @trip %> |
 <%= link_to 'Back', trips_path %>

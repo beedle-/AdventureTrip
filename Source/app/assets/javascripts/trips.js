@@ -10,6 +10,12 @@ var coordinatesArray = new Array();
 var markersArray = new Array();
 
 $(document).ready(function() {
+    // Enable tabs' actions once the page has been successfully loaded.
+    $('#tripTabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+    
     $("#trip_transport_id").change(function() {
         calcRoute();
     })
