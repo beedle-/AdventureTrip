@@ -6,7 +6,12 @@ class TripsController < ApplicationController
   # GET /trips
   # GET /trips.json
   def index
-    @trips = Trip.all
+    sqlRequest = "
+        SELECT *
+        FROM trips AS t
+        WHERE public = 1
+            OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ?)"
+    @trips = Trip.find_by_sql [sqlRequest, current_user.id]
   end
 
   # GET /trips/1

@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
       <th>Public</th>
       <th>Start date</th>
       <th>End date</th>
@@ -19,8 +18,7 @@
     <% @trips.each do |trip| %>
       <tr>
         <td><%= trip.title %></td>
-        <td><%= trip.description %></td>
-        <td><%= trip.public %></td>
+        <td><%= trip.public ? "yes" : "no" %></td>
         <td><%= trip.start_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.end_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.transport.name %></td>
