@@ -30,7 +30,7 @@
                 <span class="userInfos">
                     <% if user_signed_in? %>
                         You are connected as <%= current_user.email %>
-                        <%= link_to "Disconnect", destroy_user_session_path, :method => :delete %>
+                        <%= link_to "Disconnect", destroy_user_session_path, :method => :delete, :class => "disconnect-link" %>
                         <%= link_to "My Account", edit_user_registration_path %>
                     <% else %>
                         Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>

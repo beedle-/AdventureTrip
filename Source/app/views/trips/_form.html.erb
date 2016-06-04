@@ -58,7 +58,7 @@
 
         <div role="tabpanel" class="tab-pane fade" id="route">
             <div class="field">
-              <%= f.label "Transport" %><br>
+              <%= f.label "Transport: " %>
               <%= f.collection_select :transport_id, @transports, :id, :name %>
             </div>
             <div class="tripStops">
@@ -67,7 +67,8 @@
                     <div id="stops-instructions">First select the start of your trip by clicking on the map to the right.</div>
                     <div class="stopsOptions" id="stopsOptions">
                         <input type="button" class="btn btn-primary removeLastStop" onclick="removeLastStop()" value="Remove last stop" /><br/>
-                        <input class="arrivalEqualsStart" id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
+                        <input class="arrivalEqualsStart" id="arrivalEqualsStart" name="arrivalEqualsStart" title="Check me if you want your trip to be a loop." type="checkbox" value="yes">
+                        <span data-placement="bottom" data-toggle="tooltip" data-trigger="manual" id="arrivalEqualsStartText" title="Check me if you want your trip to be a loop.">The arrival stop is also the start one (count as an extra point!)</span>
                     </div>
 
                     <input type="button" class="btn btn-primary calculateRoute" id="calculateRoute" onclick="calcRoute()" value="Calculate route..." /><br/>

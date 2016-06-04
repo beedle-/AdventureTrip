@@ -13,7 +13,7 @@ class TripsController < ApplicationController
   # GET /trips/1.json
   def show
     @comments = @trip.comments
-    @comment = Comment.new    
+    @comment = Comment.new
   end
 
   # GET /trips/new
@@ -57,6 +57,12 @@ class TripsController < ApplicationController
             w.save
         end
 
+        # If the endpoint is also the startpoint, add an extra stop.
+        if params['arrivalEqualsStart']
+            w = Stop.new(:title => @trip.title + " - #{i + 1}", :loc_lat => params["waypoints"]["0"][0], :loc_lon => params["waypoints"]["0"][1], :trip_id => @trip.id, :etape_nb => (i + 1))
+            w.save
+        end
+
         format.html { redirect_to @trip, notice: 'Trip was successfully created.' }
         format.json { render :show, status: :created, location: @trip }
       else
@@ -69,7 +75,8 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1
   # PATCH/PUT /trips/1.json
   def update
-     #abort(params["waypoints"]["0"][0].inspect)
+     #abort(params["waypoints"]["0"][1].inspect)
+
      respond_to do |format|
       if @trip.update(trip_params)
         format.html { redirect_to @trip, notice: 'Trip was successfully updated.' }
