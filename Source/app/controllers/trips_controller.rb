@@ -46,23 +46,27 @@ class TripsController < ApplicationController
         # Get the permission's type which represent an usual user.
         permUser = Permission_type.find_by(permission: "user").id
         # Create a "user" permission for each selected users.
-        params["users"].each do |user|
-          perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
-          perm.save
+        if params["users"]
+            params["users"].each do |user|
+              perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
+              perm.save
+            end
         end
 
         # Create each waypoint of the trip.
-        i = 0
-        params['waypoints'].each do |waypoint|
-            i += 1
-            w = Stop.new(:title => @trip.title + " - #{i}", :loc_lat => waypoint[1][0], :loc_lon => waypoint[1][1], :trip_id => @trip.id, :etape_nb => i)
-            w.save
-        end
+        if params['waypoints']
+            i = 0
+            params['waypoints'].each do |waypoint|
+                i += 1
+                w = Stop.new(:title => @trip.title + " - #{i}", :loc_lat => waypoint[1][0], :loc_lon => waypoint[1][1], :trip_id => @trip.id, :etape_nb => i)
+                w.save
+            end
 
-        # If the endpoint is also the startpoint, add an extra stop.
-        if params['arrivalEqualsStart']
-            w = Stop.new(:title => @trip.title + " - #{i + 1}", :loc_lat => params["waypoints"]["0"][0], :loc_lon => params["waypoints"]["0"][1], :trip_id => @trip.id, :etape_nb => (i + 1))
-            w.save
+            # If the endpoint is also the startpoint, add an extra stop.
+            if params['arrivalEqualsStart']
+                w = Stop.new(:title => @trip.title + " - #{i + 1}", :loc_lat => params["waypoints"]["0"][0], :loc_lon => params["waypoints"]["0"][1], :trip_id => @trip.id, :etape_nb => (i + 1))
+                w.save
+            end
         end
 
         format.html { redirect_to @trip, notice: 'Trip was successfully created.' }
@@ -91,9 +95,11 @@ class TripsController < ApplicationController
         adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id)
         adminPerm.save
         # Create a "user" permission for each selected users.
-        params["users"].each do |user|
-            perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
-            perm.save
+        if params["users"]
+            params["users"].each do |user|
+                perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
+                perm.save
+            end
         end
 
         # Remove each current waypoint.
@@ -101,17 +107,19 @@ class TripsController < ApplicationController
             s.destroy
         end
         # Create each waypoint of the trip.
-        i = 0
-        params['waypoints'].each do |waypoint|
-            i += 1
-            w = Stop.new(:title => @trip.title + " - #{i}", :loc_lat => waypoint[1][0], :loc_lon => waypoint[1][1], :trip_id => @trip.id, :etape_nb => i)
-            w.save
-        end
+        if params['waypoints']
+            i = 0
+            params['waypoints'].each do |waypoint|
+                i += 1
+                w = Stop.new(:title => @trip.title + " - #{i}", :loc_lat => waypoint[1][0], :loc_lon => waypoint[1][1], :trip_id => @trip.id, :etape_nb => i)
+                w.save
+            end
 
-        # If the endpoint is also the startpoint, add an extra stop.
-        if params['arrivalEqualsStart']
-            w = Stop.new(:title => @trip.title + " - #{i + 1}", :loc_lat => params["waypoints"]["0"][0], :loc_lon => params["waypoints"]["0"][1], :trip_id => @trip.id, :etape_nb => (i + 1))
-            w.save
+            # If the endpoint is also the startpoint, add an extra stop.
+            if params['arrivalEqualsStart']
+                w = Stop.new(:title => @trip.title + " - #{i + 1}", :loc_lat => params["waypoints"]["0"][0], :loc_lon => params["waypoints"]["0"][1], :trip_id => @trip.id, :etape_nb => (i + 1))
+                w.save
+            end
         end
 
         format.html { redirect_to @trip, notice: 'Trip was successfully updated.' }
