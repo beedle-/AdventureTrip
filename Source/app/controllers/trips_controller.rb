@@ -47,6 +47,14 @@ class TripsController < ApplicationController
           perm.save
         end
 
+        # Create each waypoint of the trip.
+        i = 0
+        params['waypoints'].each do |waypoint|
+            i += 1
+            w = Stop.new(:title => @trip.title + " - #{i}", :loc_lat => waypoint[1][0], :loc_lon => waypoint[1][1], :trip_id => @trip.id, :etape_nb => i)
+            w.save
+        end
+
         format.html { redirect_to @trip, notice: 'Trip was successfully created.' }
         format.json { render :show, status: :created, location: @trip }
       else
@@ -59,7 +67,8 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1
   # PATCH/PUT /trips/1.json
   def update
-    respond_to do |format|
+     #abort(params["waypoints"]["0"][0].inspect)
+     respond_to do |format|
       if @trip.update(trip_params)
         format.html { redirect_to @trip, notice: 'Trip was successfully updated.' }
         format.json { render :show, status: :ok, location: @trip }

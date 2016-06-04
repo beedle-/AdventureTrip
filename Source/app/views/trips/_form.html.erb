@@ -11,10 +11,20 @@
     </div>
   <% end %>
 
+  <!-- Add each existing waypoints as hidden fields if the user is editing a trip. -->
+  <% if !@trip.new_record? %>
+    <% i = 1 %>
+    <% @trip.stops.each do |s| %>
+        <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lat, :id => "waypoint-#{i}-1" %>
+        <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lon, :id => "waypoint-#{i}-2" %>
+        <% i += 1 %>
+    <% end %>
+  <% end %>
+
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" id="tripTabs" role="tablist">
     <li role="presentation" class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
-    <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab">Route</a></li>
+    <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab" id="route-tab">Route</a></li>
     <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
     <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
     <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
@@ -26,15 +36,15 @@
         <div role="tabpanel" class="tab-pane fade in active" id="summary">
             <div class="field">
               <%= f.label :title %><br>
-              <%= f.text_field :title %>
+              <%= f.text_field :title, class: "form-control" %>
             </div>
             <div class="field">
               <%= f.label :description %><br>
-              <%= f.text_area :description %>
+              <%= f.text_area :description, class: "form-control" %>
             </div>
             <div class="field">
-              <%= f.label :public %><br>
               <%= f.check_box :public %>
+              <%= f.label :public %>
             </div>
             <div class="field">
               <%= f.label :start_date %><br>
@@ -51,16 +61,16 @@
               <%= f.label "Transport" %><br>
               <%= f.collection_select :transport_id, @transports, :id, :name %>
             </div>
-            <div class="trip-stops">
+            <div class="tripStops">
                 <div class="stops">
                     <h4><strong>Stops</strong></h4>
                     <div id="stops-instructions">First select the start of your trip by clicking on the map to the right.</div>
                     <div class="stopsOptions" id="stopsOptions">
-                        <button class="removeLastStop" onclick="removeLastStop()">Remove last stop</button><br/>
-                        <input id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
+                        <input type="button" class="btn btn-primary removeLastStop" onclick="removeLastStop()" value="Remove last stop" /><br/>
+                        <input class="arrivalEqualsStart" id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
                     </div>
 
-                    <button class="calculateRoute" id="calculateRoute" onclick="calcRoute()">Calculate route...</button><br/>
+                    <input type="button" class="btn btn-primary calculateRoute" id="calculateRoute" onclick="calcRoute()" value="Calculate route..." /><br/>
                 </div>
                 <div class="map" id="map"></div>
             </div>
@@ -93,6 +103,6 @@
   <br/>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit(class: "btn btn-primary") %>
   </div>
 <% end %>

@@ -10,14 +10,25 @@ var coordinatesArray = new Array();
 var markersArray = new Array();
 
 $(document).ready(function() {
+    var mapAlreadyDisplayedOnce = false;
+
     // Enable tabs' actions once the page has been successfully loaded.
     $('#tripTabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
     })
-    
+
     $("#trip_transport_id").change(function() {
         calcRoute();
+    })
+
+    // As we work with tabs we have to manually initialize the Google's map when
+    // the user clicks on the "Route" tab for the first time.
+    $('#route-tab').on('shown.bs.tab', function (e) {
+        if (!mapAlreadyDisplayedOnce) {
+            mapAlreadyDisplayedOnce = true;
+            initMap();
+        }
     })
 })
 
@@ -29,13 +40,40 @@ function updateInstructions() {
             $("#stopsOptions").hide();
             break;
         case 1:
-            $("#stops-instructions").text("Then select the locations you want to stop on the map and press the \"Calculate route...\" button when you're done.");
+            $("#stops-instructions").html("Then select the locations you want to stop on the map and press the \"<strong>Calculate route...</strong>\" button when you have at least two locations.");
             $("#stopsOptions").show();
             $("#calculateRoute").hide();
             break;
         case 2:
             $("#calculateRoute").show();
     }
+}
+
+// Initializes the existing points on the map when an used edits a trip.
+function initExistingPoints() {
+    var bounds = new google.maps.LatLngBounds();
+
+    // Deals with each hidden waypoint fields added in _form.html.erb.
+    for (var i = 1; i <= ($("input[name^='waypoints']").length / 2); ++i) {
+        // Get the current waypoint's latitude and longitude.
+        var lat_p = parseInt($("#waypoint-" + i + "-1").val());
+        var lon_p = parseInt($("#waypoint-" + i + "-2").val());
+
+        // Add the point in the coordinates array.
+        coordinatesArray.push({lat: lat_p, lng: lon_p});
+        // Add the point on the map.
+        markersArray.push(new google.maps.Marker({
+            position: {lat: lat_p, lng: lon_p},
+            map: map,
+            label: coordinatesArray.length.toString()
+        }));
+
+        // Updates text instructions.
+        updateInstructions();
+    }
+
+    // Calculates the route.
+    calcRoute();
 }
 
 // Initialize the Google Maps' map
@@ -61,6 +99,7 @@ function initMap() {
     // Add a marker on the map when the user clicks on it.
     // Also save the marker's coordinates to calculate the route.
     map.addListener("click", function(e) {
+        console.log(e.latLng);
         coordinatesArray.push(e.latLng);
         markersArray.push(new google.maps.Marker({
             position: e.latLng,
@@ -68,8 +107,26 @@ function initMap() {
             label: coordinatesArray.length.toString()
         }));
 
+        // Add two hidden inputs to the form, indicating the new entered coordinates.
+        // Latitude
+        $('<input>').attr({
+            type:   'hidden',
+            id:     'waypoint-' + coordinatesArray.length + '-1',
+            name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
+            value:  e.latLng.lat()
+        }).appendTo('form');
+        // Longitude
+        $('<input>').attr({
+            type:   'hidden',
+            id:     'waypoint-' + coordinatesArray.length + '-2',
+            name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
+            value:  e.latLng.lng()
+        }).appendTo('form');
+
         updateInstructions();
     })
+
+    initExistingPoints();
 }
 
 // Calculate the given route and display it on the map.
@@ -133,6 +190,10 @@ function removeLastStop() {
         markersArray[markersArray.length - 1].setMap(null);
         markersArray.pop();
         coordinatesArray.pop();
+
+        // Remove the corresponding hidden input from the form.
+        $("#waypoint-" + (coordinatesArray.length + 1) + "-1").remove();
+        $("#waypoint-" + (coordinatesArray.length + 1) + "-2").remove();
 
         updateInstructions();
     }

@@ -2,6 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $map-height: 500px;
+$stop-padding: 1em;
+
+.nav-tabs a:active, .nav-tabs a:focus {
+    outline: 0;
+}
 
 .tab-content {
     -moz-border-bottom-colors: none;
@@ -23,7 +28,7 @@ $map-height: 500px;
     }
 }
 
-.trip-stops {
+.tripStops {
     height: $map-height;
     width: 100%;
 }
@@ -33,7 +38,9 @@ $map-height: 500px;
     float: left;
     height: $map-height;
     overflow: auto;
-    padding: 1em;
+    padding: $stop-padding;
+    position: relative;
+    text-align: center;
     width: 30%;
 }
 
@@ -41,9 +48,20 @@ $map-height: 500px;
     display: none;
 }
 
+.removeLastStop {
+    margin: 10px 0;
+}
+
+.arrivalEqualsStart {
+    margin-top: 3em !important;
+}
+
 .calculateRoute {
+    bottom: $stop-padding;
     display: none;
-    margin-top: 30px;
+    left: $stop-padding;
+    position: absolute;
+    width: calc(100% - 2 * #{$stop-padding});
 }
 
 .map {

@@ -4,8 +4,11 @@
         <title>Adventure Trip!</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
         <%= csrf_meta_tags %>
+        <!-- The caller of Google Maps' API, which will call the initMap function back. -->
+        <script async defer
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-hp0MQg5eXA-K8Xn5_gGDC5oDmmFfOxM">
+        </script>
     </head>
     <body>
         <% if params[:controller] == "users" && params[:action] == "index" && !user_signed_in? %>
@@ -46,4 +49,5 @@
             </div>
         </div>
     </body>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </html>
