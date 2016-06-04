@@ -6,12 +6,16 @@ class TripsController < ApplicationController
   # GET /trips
   # GET /trips.json
   def index
-    sqlRequest = "
-        SELECT *
-        FROM trips AS t
-        WHERE public = 1
-            OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ?)"
-    @trips = Trip.find_by_sql [sqlRequest, current_user.id]
+    if user_signed_in?
+        sqlRequest = "
+            SELECT *
+            FROM trips AS t
+            WHERE public = 1
+                OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ?)"
+        @trips = Trip.find_by_sql [sqlRequest, current_user.id]
+    else
+        @trips = Trip.where(public: 1)
+    end
   end
 
   # GET /trips/1
@@ -19,6 +23,11 @@ class TripsController < ApplicationController
   def show
     @comments = @trip.comments
     @comment = Comment.new
+
+    users_ids = Permission.select(:user_id).where(trip_id: @trip.id)
+    @users = User.where(:id => users_ids)
+
+    @transport = Transport.find(@trip.transport_id).name
   end
 
   # GET /trips/new

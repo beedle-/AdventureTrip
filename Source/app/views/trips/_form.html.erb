@@ -28,11 +28,10 @@
     <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
     <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
     <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
-    <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
   </ul>
 
   <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content tabAddEdit">
         <div role="tabpanel" class="tab-pane fade in active" id="summary">
             <div class="field">
               <%= f.label :title %><br>
@@ -96,7 +95,7 @@
                         end
                       %>
 
-                      <option value="<%= user.id %>"<%= (isUserInTrip == 1) ? "selected='selected'" : "" %>><%= user.email %></option>
+                      <option value="<%= user.id %>"<%= (isUserInTrip == 1) ? "selected='selected'" : "" %>><%= user.user_name + " (" + user.first_name + " " + user.family_name + ")" %></option>
                   <% end %>
               </select>
             </div>
@@ -107,10 +106,6 @@
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="packing">
-            ...
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="comments">
             ...
         </div>
     </div>

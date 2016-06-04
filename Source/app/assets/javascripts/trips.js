@@ -4,11 +4,17 @@
 var MAX_STOPS = 10;
 var directionsDisplay;
 var directionsService;
+var editableMap = false;
 var map;
 var coordinatesArray = new Array();
 var markersArray = new Array();
 
 $(document).ready(function() {
+    // Set the map editable if the user is located either on the add or edit trip pages.
+    if ($("#map").length) {
+        editableMap = true;
+    }
+
     var mapAlreadyDisplayedOnce = false;
 
     // Enable tabs' actions once the page has been successfully loaded.
@@ -84,68 +90,77 @@ function initExistingPoints() {
 
 // Initialize the Google Maps' map
 function initMap() {
+    var mapObject = editableMap ? document.getElementById("map") : document.getElementById("mapTripDetails");
+
     // Initialize direction service and renderer, which will be used to calculate
     // routes between points.
     directionsService = new google.maps.DirectionsService();
-    directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+
+    if (editableMap) {
+        directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+    } else {
+        directionsDisplay = new google.maps.DirectionsRenderer();
+    }
 
     // Initialize the map.
     var mapOptions = {
         zoom: 7,
         center: new google.maps.LatLng(46.869395, 8.328190)
     }
-    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    map = new google.maps.Map(mapObject, mapOptions);
     map.setOptions({draggableCursor:'default'});
 
     // Set the map for the directions' displaying.
     directionsDisplay.setMap(map);
 
-    // Add a marker on the map when the user clicks on it.
+    // Add a marker on the map when the user clicks on it, if it is editable.
     // Also save the marker's coordinates to calculate the route.
     // Only possible if there is not more than 10 points yet.
-    map.addListener("click", function(e) {
-        // Google Maps API doesn't allow us to have more than a maximum number
-        // of points per route. This value is currently 10.
-        if (coordinatesArray.length < MAX_STOPS) {
-            // As the checkbox counts as an extra stop we have to disable it if
-            // there is already too much stop on the map.
-            if (coordinatesArray.length == MAX_STOPS - 1) {
-                $("#arrivalEqualsStart").prop("checked", false);
-                $("#arrivalEqualsStart").prop("disabled", true);
-                // Display a tooltip on the checkbox to warn the user.
-                $("#arrivalEqualsStart").attr("title", "Please remove a stop if you want to check this checkbox.");
-                $("#arrivalEqualsStartText").attr("title", "Please remove a stop if you want to check this checkbox.");
-                $("#arrivalEqualsStartText").tooltip('show');
+    if (editableMap) {
+        map.addListener("click", function(e) {
+            // Google Maps API doesn't allow us to have more than a maximum number
+            // of points per route. This value is currently 10.
+            if (coordinatesArray.length < MAX_STOPS) {
+                // As the checkbox counts as an extra stop we have to disable it if
+                // there is already too much stop on the map.
+                if (coordinatesArray.length == MAX_STOPS - 1) {
+                    $("#arrivalEqualsStart").prop("checked", false);
+                    $("#arrivalEqualsStart").prop("disabled", true);
+                    // Display a tooltip on the checkbox to warn the user.
+                    $("#arrivalEqualsStart").attr("title", "Please remove a stop if you want to check this checkbox.");
+                    $("#arrivalEqualsStartText").attr("title", "Please remove a stop if you want to check this checkbox.");
+                    $("#arrivalEqualsStartText").tooltip('show');
+                }
+
+                coordinatesArray.push(e.latLng);
+                markersArray.push(new google.maps.Marker({
+                    position: e.latLng,
+                    map: map,
+                    label: (coordinatesArray.length - 1).toString()
+                }));
+
+                // Add two hidden inputs to the form, indicating the new entered coordinates.
+                // Latitude
+                $('<input>').attr({
+                    type:   'hidden',
+                    id:     'waypoint-' + coordinatesArray.length + '-1',
+                    name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
+                    value:  e.latLng.lat()
+                }).appendTo('form');
+                // Longitude
+                $('<input>').attr({
+                    type:   'hidden',
+                    id:     'waypoint-' + coordinatesArray.length + '-2',
+                    name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
+                    value:  e.latLng.lng()
+                }).appendTo('form');
+
+                updateInstructions();
+            } else {
+                alert("You can't exceed the maximum number of points per trip (" + MAX_STOPS + ").\nPlease remove some of them in order to be able to add some new.");
             }
-
-            coordinatesArray.push(e.latLng);
-            markersArray.push(new google.maps.Marker({
-                position: e.latLng,
-                map: map,
-                label: (coordinatesArray.length - 1).toString()
-            }));
-
-            // Add two hidden inputs to the form, indicating the new entered coordinates.
-            // Latitude
-            $('<input>').attr({
-                type:   'hidden',
-                id:     'waypoint-' + coordinatesArray.length + '-1',
-                name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
-                value:  e.latLng.lat()
-            }).appendTo('form');
-            // Longitude
-            $('<input>').attr({
-                type:   'hidden',
-                id:     'waypoint-' + coordinatesArray.length + '-2',
-                name:   'waypoints[' + (coordinatesArray.length - 1) + '][]',
-                value:  e.latLng.lng()
-            }).appendTo('form');
-
-            updateInstructions();
-        } else {
-            alert("You can't exceed the maximum number of points per trip (" + MAX_STOPS + ").\nPlease remove some of them in order to be able to add some new.");
-        }
-    })
+        })
+    }
 
     initExistingPoints();
 }
@@ -157,10 +172,18 @@ function calcRoute() {
         // to erase it by setting the directionDisplay object's map to null.
         // Thus, we have to set the map again.
         directionsDisplay.setMap(map);
-        //var selectedMode = document.getElementById("mode").value;
-        var selectedMode = $("#trip_transport_id").find(":selected").text().toUpperCase();
+
+        var selectedMode;
         var waypoints = new Array();
         var arrival = null;
+
+        // Get the selected mode with the select value or the displayed text,
+        // depending on the current action (edit or add a trip).
+        if (editableMap) {
+            selectedMode = $("#trip_transport_id").find(":selected").text().toUpperCase();
+        } else {
+            selectedMode = $("#transport_name").text().toUpperCase();
+        }
 
         // Build the waypoints of the route, taking off the start and the
         // arrival points.
@@ -202,15 +225,15 @@ function calcRoute() {
                 directionsDisplay.setDirections(response);
             }
         });
-    } else {
+    } else if (editableMap) {
         alert("Please select at least two locations.");
     }
 }
 
 // Remove the last entered trip's stop.
 function removeLastStop() {
-    // There must be at least one stop to remove.
-    if (markersArray.length > 0) {
+    // There must be at least one stop to remove and the map must be editable.
+    if (editableMap && markersArray.length > 0) {
         // Enable the checkbox if it has been disabled before.
         $("#arrivalEqualsStart").prop("disabled", false);
         // Hide the perhaps-displayed tooltip on the checkbox.
