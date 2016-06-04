@@ -62,7 +62,7 @@
         <strong>Participants:</strong><br/>
         <ul>
         <% @users.each do |u| %>
-            <li><%= u.user_name %></li>
+            <li><%= u.user_name + " (" + u.first_name + " " + u.family_name + ")" %></li>
         <% end %>
         </ul>
     </div>
