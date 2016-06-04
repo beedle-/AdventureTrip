@@ -60,8 +60,9 @@ function initExistingPoints() {
 
         // If the last stops equals the first one, we do not add it to the map
         // but check the checkbox instead.
-        if (i == ($("input[name^='waypoints']").length / 2) && lat_p == coordinatesArray[0].lat && lon_p == coordinatesArray[0].lng) {
+        if (i > 1 && i == ($("input[name^='waypoints']").length / 2) && lat_p == coordinatesArray[0].lat && lon_p == coordinatesArray[0].lng) {
             $("#arrivalEqualsStart").prop("checked", true);
+            $("input[name^='waypoints[" + (i - 1) + "]']").remove();
         } else {
             // Add the point in the coordinates array.
             coordinatesArray.push({lat: lat_p, lng: lon_p});

@@ -78,7 +78,6 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1.json
   def update
      #abort(params["waypoints"]["0"][1].inspect)
-
      respond_to do |format|
       if @trip.update(trip_params)
         # Get the permission's type which represent an usual user.
