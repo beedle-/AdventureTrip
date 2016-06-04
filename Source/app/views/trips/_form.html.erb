@@ -82,7 +82,21 @@
               <%= f.label "Users" %><br>
               <select name="users[]" multiple>
                   <%= @users.each do |user| %>
-                      <option value="<%= user.id %>"><%= user.email %></option>
+                      <% isUserInTrip = 0 %>
+                      <%
+                        # Select the users who belongs to the trip if this one is
+                        # edited.
+                        if !@trip.new_record?
+                            @tripUsers.each do |u|
+                                # Check if the current user belongs to the trip.
+                                if u.user_id == user.id
+                                    isUserInTrip = 1
+                                end
+                            end
+                        end
+                      %>
+
+                      <option value="<%= user.id %>"<%= (isUserInTrip == 1) ? "selected='selected'" : "" %>><%= user.email %></option>
                   <% end %>
               </select>
             </div>
