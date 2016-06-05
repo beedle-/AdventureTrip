@@ -6,6 +6,8 @@ var directionsDisplay;
 var directionsService;
 var editableMap = false;
 var map;
+var totalDistance = 0;
+var totalDuration = 0;
 var coordinatesArray = new Array();
 var markersArray = new Array();
 
@@ -23,6 +25,7 @@ $(document).ready(function() {
         $(this).tab('show');
     })
 
+    // Calculate the route when the user change the transport in the select element.
     $("#trip_transport_id").change(function() {
         calcRoute();
     })
@@ -33,6 +36,15 @@ $(document).ready(function() {
         if (!mapAlreadyDisplayedOnce) {
             mapAlreadyDisplayedOnce = true;
             initMap();
+        }
+    })
+
+    // Calculate the route if not already done when the user clicks on the "Costs" tab.
+    $('#costs-tab').on('shown.bs.tab', function (e) {
+        if (mapAlreadyDisplayedOnce) {
+            $("#calculateRouteWarning").hide();
+            $("#costPerKm, #calculateCostsBtn").prop("disabled", false);
+            calculateCosts();
         }
     })
 })
@@ -66,6 +78,27 @@ function selectAllParticipants() {
     {
          selectBox.options[i].selected = true;
     }
+}
+
+// Convert the given number of seconds to a "HH:MM:SS" format.
+function secondsToHours(seconds) {
+    var hours   = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    var seconds = seconds - (hours * 3600) - (minutes * 60);
+
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+
+    return hours + ":" + minutes + ":" + seconds;
 }
 
 // Update the map's instructions so the user know what to do next.
@@ -126,12 +159,8 @@ function initMap() {
     // Initialize direction service and renderer, which will be used to calculate
     // routes between points.
     directionsService = new google.maps.DirectionsService();
-
-    if (editableMap) {
-        directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
-    } else {
-        directionsDisplay = new google.maps.DirectionsRenderer();
-    }
+    // Remove routes' markers to avoid them overlapping markers of the user.
+    directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
 
     // Initialize the map.
     var mapOptions = {
@@ -139,7 +168,11 @@ function initMap() {
         center: new google.maps.LatLng(46.869395, 8.328190)
     }
     map = new google.maps.Map(mapObject, mapOptions);
-    map.setOptions({draggableCursor:'default'});
+
+    // Change the mouse's cursor if the map is editable to be more precise when
+    // pointing places.
+    if (editableMap)
+        map.setOptions({draggableCursor:'default'});
 
     // Set the map for the directions' displaying.
     directionsDisplay.setMap(map);
@@ -254,6 +287,24 @@ function calcRoute() {
         directionsService.route(request, function(response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(response);
+
+                // Calculate route's total distance and duration.
+                var legs = response.routes[0].legs;
+
+                // Iterate over each route's "legs", which means each the path
+                // between each route's markers.
+                for (var i = 0; i < legs.length; ++i) {
+                    // Distance in meters.
+                    totalDistance += legs[i].distance.value;
+                    // Duration is seconds.
+                    totalDuration += legs[i].duration.value;
+                }
+
+                // Get the distance in kilometers.
+                totalDistance = Math.round(totalDistance / 10) / 100
+
+                $('#distance').html("Distance: <strong>" + totalDistance + " km</strong>");
+                $('#duration').html("Duration in hours: <strong>" + secondsToHours(totalDuration) + "</strong>");
             }
         });
     } else if (editableMap) {
@@ -283,6 +334,19 @@ function removeLastStop() {
 
         // Remove the eventually calculated route if the used removes a coordinate.
         directionsDisplay.setMap(null);
+        $('#distance').text("");
+        $('#duration').text("");
+
         updateInstructions();
+    }
+}
+
+function calculateCosts() {
+    var costs = parseFloat($("#costPerKm").val());
+
+    if (!isNaN(costs)) {
+        $("#tripCosts").text("CHF " + (Math.round(totalDistance * costs * 100) / 100));
+    } else {
+        $("#tripCosts").text("-");
     }
 }

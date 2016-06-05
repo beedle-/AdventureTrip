@@ -26,7 +26,7 @@
     <li role="presentation" class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
     <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab" id="route-tab">Route</a></li>
     <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
-    <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
+    <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab" id="costs-tab">Costs</a></li>
     <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
   </ul>
 
@@ -69,6 +69,9 @@
                         <input class="arrivalEqualsStart" id="arrivalEqualsStart" name="arrivalEqualsStart" title="Check me if you want your trip to be a loop." type="checkbox" value="yes">
                         <span data-placement="bottom" data-toggle="tooltip" data-trigger="manual" id="arrivalEqualsStartText" title="Check me if you want your trip to be a loop.">The arrival stop is also the start one (count as an extra point!)</span>
                     </div>
+
+                    <div class="distanceDurationDivs" id="distance"></div>
+                    <div class="distanceDurationDivs" id="duration"></div>
 
                     <input type="button" class="btn btn-primary calculateRoute" id="calculateRoute" onclick="calcRoute()" value="Calculate route..." /><br/>
                 </div>
@@ -113,7 +116,11 @@
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="costs">
-            ...
+            <div class="calculateRouteWarning" id="calculateRouteWarning">Please first calculate the trip's route by clicking the "Route" tab, then come back here.</div>
+            Please enter the medium cost per kilometers:
+            <input disabled="disabled" id="costPerKm" min="0" name="costPerKm" onchange="calculateCosts()" placeholder="0.00" step="0.05" type="number"> CHF
+            <input class="calculateCostsButton" disabled="disabled" id="calculateCostsBtn" onclick="calculateCosts()" type="button" value="Calculate costs!" /><br/>
+            <div class="tripCosts"><u>Costs:</u><br/><div class="costs" id="tripCosts">-</div></div>
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="packing">
