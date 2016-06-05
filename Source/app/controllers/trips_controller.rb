@@ -40,15 +40,17 @@ class TripsController < ApplicationController
   # GET /trips/1/edit
   def edit
     @transports = Transport.all
-    @users = User.where.not(id: current_user.id)
-    # Get users of the trip.
-    @tripUsers = Permission.select(:user_id).where(trip_id: @trip.id)
+
+    # Get participants of the trip.
+    users_ids = Permission.select(:user_id).where(trip_id: @trip.id)
+    @participants = User.where(:id => users_ids)
+    # Get users who don't belong to the trip.
+    @users = User.where.not(:id => users_ids)
   end
 
   # POST /trips
   # POST /trips.json
   def create
-    #abort(trip_params.inspect)
     @trip = Trip.new(trip_params)
 
     respond_to do |format|

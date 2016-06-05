@@ -37,6 +37,37 @@ $(document).ready(function() {
     })
 })
 
+// Add a participant to the trip by moving the selected person from "Users" to
+// "Participants" in the form.
+function addParticipants() {
+    $("#usersSelect").find(":selected").each(function() {
+        $("#participantsSelect").append($(this));
+    })
+}
+
+// Remove a participant to the trip by moving the selected person from "Participants"
+// "Users" in the form.
+function removeParticipants(currentUserId) {
+    $("#participantsSelect").find(":selected").each(function() {
+        if ($(this).val() != currentUserId) {
+            $("#usersSelect").append($(this));
+        } else {
+            alert("You cannot remove yourself from the trip!");
+        }
+    })
+}
+
+// Select all participants in order to send them with the form when the user
+// clicked on the submit button.
+function selectAllParticipants() {
+    selectBox = document.getElementById("participantsSelect");
+
+    for (var i = 0; i < selectBox.options.length; i++)
+    {
+         selectBox.options[i].selected = true;
+    }
+}
+
 // Update the map's instructions so the user know what to do next.
 function updateInstructions() {
     switch (coordinatesArray.length) {
