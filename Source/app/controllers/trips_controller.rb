@@ -24,6 +24,9 @@ class TripsController < ApplicationController
     @comments = @trip.comments
     @comment = Comment.new
 
+    @items = @trip.items
+    @item = Item.new
+
     users_ids = Permission.select(:user_id).where(trip_id: @trip.id)
     @users = User.where(:id => users_ids)
 

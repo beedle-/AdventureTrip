@@ -76,7 +76,23 @@
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="packing">
-        ...
+        <p>
+          <strong>Packing list:</strong>
+        </p>
+
+        <ul id="item_list">
+          <% @items.each do |item| %>
+            <li> <%= item.name %></li>
+          <% end %>
+        </ul>
+
+        <p>
+          <%= form_for(@item,:remote => true) do |f| %>
+            <strong>Add an item:</strong> <%= f.text_field :name %> <br>
+            <%= f.hidden_field :trip_id, :value => @trip.id %>
+            <%= f.submit "Créer" %>
+          <% end %>
+        </p>
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="comments">
@@ -92,10 +108,10 @@
 
         <p>
           <%= form_for(@comment,:remote => true) do |f| %>
-            <strong> Ajouter un commentaire:</strong> <%= f.text_field :text %> <br>
+            <strong> Add a comments:</strong> <%= f.text_field :text %> <br>
             <%= f.hidden_field :user_id, :value => current_user.id %>
             <%= f.hidden_field :trip_id, :value => @trip.id %>
-            <%= f.submit "Créer" %>
+            <%= f.submit "Add" %>
           <% end %>
         </p>
     </div>
