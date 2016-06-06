@@ -1,53 +1,107 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @trip.title %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @trip.description %>
-</p>
-
-<p>
-  <strong>Public:</strong>
-  <%= @trip.public %>
-</p>
-
-<p>
-  <strong>Start date:</strong>
-  <%= @trip.start_date %>
-</p>
-
-<p>
-  <strong>End date:</strong>
-  <%= @trip.end_date %>
-</p>
-
-<p>
-  <strong>Transport:</strong>
-  <%= @trip.transport_id %>
-</p>
-
-<p>
-  <strong>Commentaires:</strong>
-</p>
-
-<ul id="comments">
-  <% @comments.each do |comment| %>
-    <li> <%= comment.text %> </li>
+<!-- Add each existing waypoints as hidden fields if the user is editing a trip. -->
+<% if !@trip.new_record? %>
+  <% i = 1 %>
+  <% @trip.stops.each do |s| %>
+      <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lat, :id => "waypoint-#{i}-1" %>
+      <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lon, :id => "waypoint-#{i}-2" %>
+      <% i += 1 %>
   <% end %>
+<% end %>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="tripTabs" role="tablist">
+  <li role="presentation" class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
+  <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab" id="route-tab">Route</a></li>
+  <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
+  <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab" id="costs-tab">Costs</a></li>
+  <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
+  <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
 </ul>
 
-<p>
-  <%= form_for(@comment,:remote => true) do |f| %>
-    <strong> Ajouter un commentaire:</strong> <%= f.text_field :text %> <br>
-    <%= f.hidden_field :user_id, :value => current_user.id %>
-    <%= f.hidden_field :trip_id, :value => @trip.id %>
-    <%= f.submit "Créer" %>
-  <% end %>
-</p>
+<!-- Tab panes -->
+<div class="tab-content tabShow">
+    <div role="tabpanel" class="tab-pane fade in active" id="summary">
+        <p>
+          <strong>Title:</strong>
+          <%= @trip.title %>
+        </p>
+
+        <p>
+          <strong>Description:</strong>
+          <%= @trip.description %>
+        </p>
+
+        <p>
+          <strong>Public:</strong>
+          <%= @trip.public %>
+        </p>
+
+        <p>
+          <strong>Start date:</strong>
+          <%= @trip.start_date %>
+        </p>
+
+        <p>
+          <strong>End date:</strong>
+          <%= @trip.end_date %>
+        </p>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="route">
+        <p>
+          <strong>Transport:</strong>
+          <span id="transport_name"><%= @transport %></span>
+        </p>
+
+        <div class="mapBase" id="mapTripDetails"></div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="participants">
+        <strong>Participants:</strong><br/>
+        <ul>
+        <% @users.each do |u| %>
+            <li><%= u.user_name + " (" + u.first_name + " " + u.family_name + ")" %></li>
+        <% end %>
+        </ul>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="costs">
+        <div class="calculateRouteWarning" id="calculateRouteWarning">Please first calculate the trip's route by clicking the "Route" tab, then come back here.</div>
+        Please enter the medium cost per kilometers:
+        <input disabled="disabled" id="costPerKm" min="0" name="costPerKm" onchange="calculateCosts()" placeholder="0.00" step="0.05" type="number"> CHF
+        <input class="calculateCostsButton" disabled="disabled" id="calculateCostsBtn" onclick="calculateCosts()" type="button" value="Calculate costs!" /><br/>
+        <div class="tripCosts"><u>Costs:</u><br/><div class="costs" id="tripCosts">-</div></div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="packing">
+        ...
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="comments">
+        <p>
+          <strong>Comments:</strong>
+        </p>
+
+        <ul id="comments">
+          <% @comments.each do |comment| %>
+            <li> <%= comment.text %> </li>
+          <% end %>
+        </ul>
+
+        <p>
+          <%= form_for(@comment,:remote => true) do |f| %>
+            <strong> Ajouter un commentaire:</strong> <%= f.text_field :text %> <br>
+            <%= f.hidden_field :user_id, :value => current_user.id %>
+            <%= f.hidden_field :trip_id, :value => @trip.id %>
+            <%= f.submit "Créer" %>
+          <% end %>
+        </p>
+    </div>
+</div>
+
+<br/>
 
 <%= link_to 'Edit', edit_trip_path(@trip) %> |
 <%= link_to 'Back', trips_path %>

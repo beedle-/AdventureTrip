@@ -32,6 +32,10 @@ $footer-height: 44px;
     z-index: 10;
 }
 
+.disconnect-link {
+    margin: 0 1vw;
+}
+
 .headerLink {
     color: black;
     font-weight: bold;
@@ -159,8 +163,7 @@ div {
 
 // ================================= HOME PAGE =================================
 .homeTop {
-    //background: rgba(0, 0, 0, 0) url(home1.jpg) no-repeat fixed center 0 / cover;
-    background: rgba(0, 0, 0, 0) url(home1.jpg) no-repeat center 0 / cover;
+    background: rgba(0, 0, 0, 0) url(home.jpg) no-repeat center 0 / cover;
     height: 100vh;
     width: 100%;
 }

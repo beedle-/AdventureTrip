@@ -2,6 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $map-height: 500px;
+$stop-padding: 1em;
+
+.nav-tabs a:active, .nav-tabs a:focus {
+    outline: 0;
+}
 
 .tab-content {
     -moz-border-bottom-colors: none;
@@ -12,18 +17,25 @@ $map-height: 500px;
     border-style: none solid solid;
     border-width: medium 1px 1px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tabAddEdit {
     padding: 1vh 1vw 3vh 1vw;
 }
 
+.tabShow {
+    padding: 1vh 1vw;
+}
+
 .tripTable {
-    border: 1px solid black;
+    margin: 3vh 0;
 
     & td {
-        padding: 0 20px;
+        padding: 5px 20px;
     }
 }
 
-.trip-stops {
+.tripStops {
     height: $map-height;
     width: 100%;
 }
@@ -33,22 +45,77 @@ $map-height: 500px;
     float: left;
     height: $map-height;
     overflow: auto;
-    padding: 1em;
-    width: 30%;
+    padding: $stop-padding;
+    position: relative;
+    text-align: center;
+    width: 32%;
 }
 
 .stopsOptions {
     display: none;
+    margin-bottom: 70px;
+}
+
+.removeLastStop {
+    margin: 10px 0;
+}
+
+.arrivalEqualsStart {
+    margin-top: 3em !important;
+}
+
+.distanceDurationDivs {
+    text-align: left;
 }
 
 .calculateRoute {
+    bottom: $stop-padding;
     display: none;
-    margin-top: 30px;
+    left: $stop-padding;
+    position: absolute;
+    width: calc(100% - 2 * #{$stop-padding});
+}
+
+.mapBase {
+    border: 1px solid black;
+    height: $map-height;
 }
 
 .map {
-    border: 1px solid black;
+    @extend .mapBase;
     float: left;
-    height: $map-height;
-    width: 70%;
+    width: 68%;
+}
+
+.userSelectsTd {
+    width: 40%;
+}
+
+.userSelects {
+    width: 100%;
+}
+
+.userButtonTd {
+    padding: 0 20px;
+    text-align: center;
+}
+
+.calculateCostsButton {
+    margin-left: 20px;
+}
+
+.calculateRouteWarning {
+    color: red;
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.tripCosts {
+    font-size: 1.5em;
+    margin-top: 30px;
+}
+
+.costs {
+    font-weight: bold;
+    margin-top: 10px;
 }

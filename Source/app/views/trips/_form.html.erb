@@ -11,30 +11,39 @@
     </div>
   <% end %>
 
+  <!-- Add each existing waypoints as hidden fields if the user is editing a trip. -->
+  <% if !@trip.new_record? %>
+    <% i = 1 %>
+    <% @trip.stops.each do |s| %>
+        <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lat, :id => "waypoint-#{i}-1" %>
+        <%= hidden_field_tag "waypoints[#{i - 1}][]", s.loc_lon, :id => "waypoint-#{i}-2" %>
+        <% i += 1 %>
+    <% end %>
+  <% end %>
+
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" id="tripTabs" role="tablist">
     <li role="presentation" class="active"><a href="#summary" aria-controls="summary" role="tab" data-toggle="tab">Summary</a></li>
-    <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab">Route</a></li>
+    <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab" id="route-tab">Route</a></li>
     <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
-    <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
+    <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab" id="costs-tab">Costs</a></li>
     <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
-    <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
   </ul>
 
   <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content tabAddEdit">
         <div role="tabpanel" class="tab-pane fade in active" id="summary">
             <div class="field">
               <%= f.label :title %><br>
-              <%= f.text_field :title %>
+              <%= f.text_field :title, class: "form-control" %>
             </div>
             <div class="field">
               <%= f.label :description %><br>
-              <%= f.text_area :description %>
+              <%= f.text_area :description, class: "form-control" %>
             </div>
             <div class="field">
-              <%= f.label :public %><br>
               <%= f.check_box :public %>
+              <%= f.label :public %>
             </div>
             <div class="field">
               <%= f.label :start_date %><br>
@@ -48,19 +57,23 @@
 
         <div role="tabpanel" class="tab-pane fade" id="route">
             <div class="field">
-              <%= f.label "Transport" %><br>
+              <%= f.label "Transport: " %>
               <%= f.collection_select :transport_id, @transports, :id, :name %>
             </div>
-            <div class="trip-stops">
+            <div class="tripStops">
                 <div class="stops">
                     <h4><strong>Stops</strong></h4>
                     <div id="stops-instructions">First select the start of your trip by clicking on the map to the right.</div>
                     <div class="stopsOptions" id="stopsOptions">
-                        <button class="removeLastStop" onclick="removeLastStop()">Remove last stop</button><br/>
-                        <input id="arrivalEqualsStart" name="arrivalEqualsStart" type="checkbox" value="yes"> The arrival stop is also the start one
+                        <input type="button" class="btn btn-primary removeLastStop" onclick="removeLastStop()" value="Remove last stop" /><br/>
+                        <input class="arrivalEqualsStart" id="arrivalEqualsStart" name="arrivalEqualsStart" title="Check me if you want your trip to be a loop." type="checkbox" value="yes">
+                        <span data-placement="bottom" data-toggle="tooltip" data-trigger="manual" id="arrivalEqualsStartText" title="Check me if you want your trip to be a loop.">The arrival stop is also the start one (count as an extra point!)</span>
                     </div>
 
-                    <button class="calculateRoute" id="calculateRoute" onclick="calcRoute()">Calculate route...</button><br/>
+                    <div class="distanceDurationDivs" id="distance"></div>
+                    <div class="distanceDurationDivs" id="duration"></div>
+
+                    <input type="button" class="btn btn-primary calculateRoute" id="calculateRoute" onclick="calcRoute()" value="Calculate route..." /><br/>
                 </div>
                 <div class="map" id="map"></div>
             </div>
@@ -68,24 +81,49 @@
 
         <div role="tabpanel" class="tab-pane fade" id="participants">
             <div class="field">
-              <%= f.label "Users" %><br>
-              <select name="users[]" multiple>
-                  <%= @users.each do |user| %>
-                      <option value="<%= user.id %>"><%= user.email %></option>
-                  <% end %>
-              </select>
+              <table>
+                  <tr>
+                      <td><%= f.label "Users" %></td>
+                      <td></td>
+                      <td><%= f.label "Participants" %></td>
+                  </tr>
+                  <tr>
+                      <td class="userSelectsTd">
+                          <select class="userSelects" id="usersSelect" multiple="multiple">
+                              <%= if @users
+                                  @users.each do |user| %>
+                                    <option value="<%= user.id %>"><%= user.user_name + " (" + user.first_name + " " + user.family_name + ")" %></option>
+                                  <% end
+                              end %>
+                          </select>
+                      </td>
+                      <td class="userButtonTd">
+                          <input type="button" onclick="addParticipants()" value=">" /><br/>
+                          <input type="button" onclick="removeParticipants(<%= current_user.id %>)" value="<" />
+                      </td>
+                      <td class="userSelectsTd">
+                          <select class="userSelects" id="participantsSelect" name="users[]" multiple="multiple">
+                              <% if @participants
+                                  @participants.each do |participant| %>
+                                      <option value="<%= participant.id %>"><%= participant.user_name + " (" + participant.first_name + " " + participant.family_name + ")" %></option>
+                                  <% end
+                              end %>
+                          </select>
+                      </td>
+                  </tr>
+              </table>
             </div>
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="costs">
-            ...
+            <div class="calculateRouteWarning" id="calculateRouteWarning">Please first calculate the trip's route by clicking the "Route" tab, then come back here.</div>
+            Please enter the medium cost per kilometers:
+            <input disabled="disabled" id="costPerKm" min="0" name="costPerKm" onchange="calculateCosts()" placeholder="0.00" step="0.05" type="number"> CHF
+            <input class="calculateCostsButton" disabled="disabled" id="calculateCostsBtn" onclick="calculateCosts()" type="button" value="Calculate costs!" /><br/>
+            <div class="tripCosts"><u>Costs:</u><br/><div class="costs" id="tripCosts">-</div></div>
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="packing">
-            ...
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="comments">
             ...
         </div>
     </div>
@@ -93,6 +131,6 @@
   <br/>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit(class: "btn btn-primary", onclick: "selectAllParticipants()") %>
   </div>
 <% end %>
