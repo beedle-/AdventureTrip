@@ -100,7 +100,7 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1
   # PATCH/PUT /trips/1.json
   def update
-     #abort(params["waypoints"]["0"][1].inspect)
+     #abort(params["users"].inspect)
      respond_to do |format|
       if @trip.update(trip_params)
         # Get the permission's type which represent an usual user.
@@ -116,8 +116,11 @@ class TripsController < ApplicationController
         # Create a "user" permission for each selected users.
         if params["users"]
             params["users"].each do |user|
-                perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
-                perm.save
+                # We don't add the current user, which is an admin.
+                if user != current_user.id.inspect
+                    perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
+                    perm.save
+                end
             end
         end
 
