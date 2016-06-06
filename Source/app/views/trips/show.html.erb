@@ -40,12 +40,12 @@
 
         <p>
           <strong>Start date:</strong>
-          <%= @trip.start_date %>
+          <%= @trip.start_date.strftime("%d-%m-%Y %H:%M:%S") %>
         </p>
 
         <p>
           <strong>End date:</strong>
-          <%= @trip.end_date %>
+          <%= @trip.end_date.strftime("%d-%m-%Y %H:%M:%S") %>
         </p>
     </div>
 
@@ -86,7 +86,7 @@
 
         <ul id="comments">
           <% @comments.each do |comment| %>
-            <li> <%= comment.text %> </li>
+            <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
           <% end %>
         </ul>
 
