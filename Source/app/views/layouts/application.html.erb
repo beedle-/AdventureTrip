@@ -32,6 +32,17 @@
                         You are connected as <b id="user_name"> <%= current_user.user_name %> </b>
                         <%= link_to "Disconnect", destroy_user_session_path, :method => :delete, :class => "disconnect-link" %>
                         <%= link_to "My Account", edit_user_registration_path %>
+                            <div class = "dropdown pull-right">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Request to join a trip (<%= @invitations.length %>)
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <% @invitations.each do |i| %>
+                                            <li> <b> <%= i.trip.title %> </b></li>
+                                            <li><%= link_to "Accept", accept_permission_path(i.id), :action => "accept", :remote => true, :id => "accept" %></li>
+                                            <li><%= link_to "Refuse", refuse_permission_path(i.id), :action => "refuse", :remote => true, :id => "refuse" %></li>
+                                    <% end %>
+                                </ul>
+                            </div>
                     <% else %>
                         Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>
                         or <%= link_to "Register", new_user_registration_path, :class => "headerLink" %>

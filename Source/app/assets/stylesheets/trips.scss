@@ -119,3 +119,21 @@ $stop-padding: 1em;
     font-weight: bold;
     margin-top: 10px;
 }
+
+a#accept:hover, a#accept:link {
+    color: green;
+}
+
+a#refuse:hover, a#refuse:link{
+    color: red;
+}
+
+.dropdown-menu
+{
+    padding-left: 5px;
+}
+
+.dropdown
+{
+    margin-left: 10px;
+}

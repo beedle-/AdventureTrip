@@ -11,7 +11,7 @@ class TripsController < ApplicationController
             SELECT *
             FROM trips AS t
             WHERE public = 1
-                OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ?)"
+                OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ? AND accepted = 1)"
         @trips = Trip.find_by_sql [sqlRequest, current_user.id]
     else
         @trips = Trip.where(public: 1)
@@ -56,7 +56,7 @@ class TripsController < ApplicationController
     respond_to do |format|
       if @trip.save
         # Create current user's admin permission on the new created trip.
-        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id)
+        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id, :accepted => 1)
         adminPerm.save
 
         # Get the permission's type which represent an usual user.
@@ -64,7 +64,7 @@ class TripsController < ApplicationController
         # Create a "user" permission for each selected users.
         if params["users"]
             params["users"].each do |user|
-              perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
+              perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
               perm.save
             end
         end
@@ -108,12 +108,12 @@ class TripsController < ApplicationController
             p.destroy
         end
         # Create current user's admin permission on the new created trip.
-        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id)
+        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id, :accepted => 1)
         adminPerm.save
         # Create a "user" permission for each selected users.
         if params["users"]
             params["users"].each do |user|
-                perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser)
+                perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
                 perm.save
             end
         end
