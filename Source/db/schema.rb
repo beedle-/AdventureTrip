@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160604141420) do
-
+ActiveRecord::Schema.define(version: 20160606104708) do
 
   create_table "comments", force: :cascade do |t|
-    t.text    "text",    limit: 4294967295, null: false
-    t.integer "trip_id", limit: 4,          null: false
-    t.integer "user_id", limit: 4,          null: false
+    t.text     "text",          limit: 4294967295, null: false
+    t.integer  "trip_id",       limit: 4,          null: false
+    t.integer  "user_id",       limit: 4,          null: false
+    t.datetime "creation_date"
   end
 
   create_table "permission_types", force: :cascade do |t|
