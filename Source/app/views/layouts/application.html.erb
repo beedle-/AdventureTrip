@@ -29,7 +29,7 @@
                 <%= link_to "Adventure Trip!", root_path, :class => "title" %>
                 <span class="userInfos">
                     <% if user_signed_in? %>
-                        You are connected as <%= current_user.email %>
+                        You are connected as <b id="user_name"> <%= current_user.user_name %> </b>
                         <%= link_to "Disconnect", destroy_user_session_path, :method => :delete, :class => "disconnect-link" %>
                         <%= link_to "My Account", edit_user_registration_path %>
                     <% else %>

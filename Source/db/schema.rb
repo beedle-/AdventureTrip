@@ -13,6 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20160604141420) do
 
+
   create_table "comments", force: :cascade do |t|
     t.text    "text",    limit: 4294967295, null: false
     t.integer "trip_id", limit: 4,          null: false
@@ -24,9 +25,10 @@ ActiveRecord::Schema.define(version: 20160604141420) do
   end
 
   create_table "permissions", force: :cascade do |t|
-    t.integer "user_id",            limit: 4, null: false
-    t.integer "trip_id",            limit: 4, null: false
-    t.integer "permission_type_id", limit: 4, null: false
+    t.integer "user_id",            limit: 4,                 null: false
+    t.integer "trip_id",            limit: 4,                 null: false
+    t.integer "permission_type_id", limit: 4,                 null: false
+    t.boolean "accepted",                     default: false
   end
 
   create_table "stops", force: :cascade do |t|
