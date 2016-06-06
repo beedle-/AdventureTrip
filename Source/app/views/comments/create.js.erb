@@ -1,1 +1,1 @@
-$('#comments').append("<li> <%= @comment.text %> </li>");
+$('#comment_list').append("<li> <%= @comment.text %> | <%= @comment.creation_date.strftime('%d-%m-%Y %H:%M:%S')%> |" + $('#user_name').html() + "</li>");

@@ -84,7 +84,7 @@
           <strong>Comments:</strong>
         </p>
 
-        <ul id="comments">
+        <ul id="comment_list">
           <% @comments.each do |comment| %>
             <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
           <% end %>
