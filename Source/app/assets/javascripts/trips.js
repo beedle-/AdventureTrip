@@ -48,6 +48,16 @@ $(document).ready(function() {
             calculateCosts();
         }
     })
+
+    // Hide comment when destroyed
+    $(".comment").on("click", function() {
+        $(this).parent().hide();
+    })
+
+    // Hide item when destroyed
+    $(".item").on("click", function() {
+        $(this).parent().hide();
+    })
 })
 
 // Change the selected participant's status (admin or normal) when the user

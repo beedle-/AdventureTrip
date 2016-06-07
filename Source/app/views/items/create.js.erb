@@ -1,1 +1,1 @@
-$('#item_list').append("<li> <%= @item.name %></li>");
+$('#item_list').append("<li> <%= @item.name %> <%= j(link_to 'Edit', edit_item_path(@item)) %> <%= j(link_to 'Destroy', @item, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => 'item') %></li>");

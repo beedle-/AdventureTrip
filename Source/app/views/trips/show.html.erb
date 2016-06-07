@@ -102,7 +102,11 @@
 
         <ul id="item_list">
           <% @items.each do |item| %>
-            <li> <%= item.name %></li>
+            <li> 
+                <%= item.name %>
+                <%= link_to 'Edit', edit_item_path(item) %>
+                <%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "item" %>  
+            </li>
           <% end %>
         </ul>
 
@@ -110,33 +114,34 @@
           <%= form_for(@item,:remote => true) do |f| %>
             <strong>Add an item:</strong> <%= f.text_field :name %> <br>
             <%= f.hidden_field :trip_id, :value => @trip.id %>
-            <%= f.submit "Créer" %>
+            <%= f.submit "Add" %>
           <% end %>
         </p>
     </div>
 
-    <% if user_signed_in? %>
-        <div role="tabpanel" class="tab-pane fade" id="comments">
-            <p>
-              <strong>Comments:</strong>
-            </p>
+    <div role="tabpanel" class="tab-pane fade" id="comments">
+        <p>
+          <strong>Comments:</strong>
+        </p>
 
-            <ul id="comment_list">
-              <% @comments.each do |comment| %>
-                <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
-              <% end %>
-            </ul>
+        <ul id="comment_list">
+          <% @comments.each do |comment| %>
+            <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %>
+               <%= link_to 'Edit', edit_comment_path(comment) %>
+               <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "comment" %>
+            </li>
+          <% end %>
+        </ul>
 
-            <p>
-              <%= form_for(@comment,:remote => true) do |f| %>
-                <strong> Add a comments:</strong> <%= f.text_field :text %> <br>
-                <%= f.hidden_field :user_id, :value => current_user.id %>
-                <%= f.hidden_field :trip_id, :value => @trip.id %>
-                <%= f.submit "Add" %>
-              <% end %>
-            </p>
-        </div>
-    <% end %>
+        <p>
+          <%= form_for(@comment,:remote => true) do |f| %>
+            <strong> Add a comments:</strong> <%= f.text_field :text %> <br>
+            <%= f.hidden_field :user_id, :value => current_user.id %>
+            <%= f.hidden_field :trip_id, :value => @trip.id %>
+            <%= f.submit "Add" %>
+          <% end %>
+        </p>
+    </div>
 </div>
 
 <br/>

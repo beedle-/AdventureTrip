@@ -139,7 +139,20 @@
         </div>
 
         <div role="tabpanel" class="tab-pane fade" id="packing">
-            ...
+          <p>
+            <strong>Packing list:</strong>
+          </p>
+
+          <ul id="item_list">
+            <% @items.each do |item| %>
+              <li> 
+                <%= item.name %>
+                <%= link_to 'Edit', edit_item_path(item) %>
+                <%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "item" %>
+              </li>
+            <% end %>
+          </ul>
+
         </div>
     </div>
 
