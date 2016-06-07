@@ -36,12 +36,19 @@ class TripsController < ApplicationController
   # GET /trips/new
   def new
     @trip = Trip.new
+
+    @items = @trip.items
+    @item = Item.new
     @transports = Transport.all
     @users = User.where.not(id: current_user.id)
   end
 
   # GET /trips/1/edit
   def edit
+
+    @items = @trip.items
+    @item = Item.new
+
     @transports = Transport.all
 
     # Get participants of the trip.

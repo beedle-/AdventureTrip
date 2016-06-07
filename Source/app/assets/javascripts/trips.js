@@ -47,6 +47,16 @@ $(document).ready(function() {
             calculateCosts();
         }
     })
+
+    // Hide comment when destroyed
+    $(".comment").on("click", function() {
+        $(this).parent().hide();
+    })
+
+    // Hide item when destroyed
+    $(".item").on("click", function() {
+        $(this).parent().hide();
+    })
 })
 
 // Add a participant to the trip by moving the selected person from "Users" to

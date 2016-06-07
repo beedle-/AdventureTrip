@@ -82,7 +82,11 @@
 
         <ul id="item_list">
           <% @items.each do |item| %>
-            <li> <%= item.name %></li>
+            <li> 
+                <%= item.name %>
+                <%= link_to 'Edit', edit_item_path(item) %>
+                <%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "item" %>  
+            </li>
           <% end %>
         </ul>
 
@@ -90,7 +94,7 @@
           <%= form_for(@item,:remote => true) do |f| %>
             <strong>Add an item:</strong> <%= f.text_field :name %> <br>
             <%= f.hidden_field :trip_id, :value => @trip.id %>
-            <%= f.submit "Créer" %>
+            <%= f.submit "Add" %>
           <% end %>
         </p>
     </div>
@@ -102,7 +106,10 @@
 
         <ul id="comment_list">
           <% @comments.each do |comment| %>
-            <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
+            <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %>
+               <%= link_to 'Edit', edit_comment_path(comment) %>
+               <%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "comment" %>
+            </li>
           <% end %>
         </ul>
 

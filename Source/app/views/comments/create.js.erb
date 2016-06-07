@@ -1,1 +1,1 @@
-$('#comment_list').append("<li> <%= @comment.text %> | <%= @comment.creation_date.strftime('%d-%m-%Y %H:%M:%S')%> |" + $('#user_name').html() + "</li>");
+$('#comment_list').append("<li> <%= @comment.text %> | <%= @comment.creation_date.strftime('%d-%m-%Y %H:%M:%S')%> |" + $('#user_name').html() + "<%= j(link_to 'Edit', edit_comment_path(@comment)) %> <%= j(link_to 'Destroy', @comment, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => 'comment') %></li>");
