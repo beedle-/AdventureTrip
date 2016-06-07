@@ -30,7 +30,8 @@ $stop-padding: 1em;
 .tripTable {
     margin: 3vh 0;
 
-    & td {
+    & td, & th {
+        text-align: left;
         padding: 5px 20px;
     }
 }
@@ -144,4 +145,8 @@ a#refuse:hover, a#refuse:link{
 
 .adminUser {
     font-weight: bold;
+}
+
+.deleteIcon {
+    margin-left: 5px;
 }

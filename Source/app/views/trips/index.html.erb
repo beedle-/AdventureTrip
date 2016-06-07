@@ -5,7 +5,7 @@
 <table class="tripTable">
   <thead>
     <tr>
-      <th>Public</th>
+      <th></th>
       <th>Title</th>
       <th>Start date</th>
       <th>End date</th>
@@ -17,24 +17,25 @@
   <tbody>
     <% @trips.each do |trip| %>
       <tr>
-        <td><input<%= trip.public ? " checked='checked'" : "" %> onclick="return false;" onkeydown="return false;" type="checkbox" /></td>
+        <td><%= trip.public ? image_tag("public.png", size: "25", "data-toggle": "tooltip", "data-placement": "left", title: "This is a public trip.") : "" %></td>
         <td><%= link_to trip.title, trip %></td>
         <td><%= trip.start_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.end_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.transport.name %></td>
         <td>
             <%
+                # Super-admin can edit/remove all trips.
                 if current_user.super_admin %>
-                    <%= link_to 'Edit', edit_trip_path(trip) %>
-                    <%= link_to 'Destroy', trip, method: :delete, data: { confirm: 'Are you sure?' } %>
+                    <%= link_to image_tag("edit.png", size: "25"), edit_trip_path(trip) %>
+                    <%= link_to image_tag("delete.png", size: "25", class: "deleteIcon"), trip, method: :delete, data: { confirm: 'Are you sure?' } %>
                 <% else
                     # Show the "Edit" and "Destroy" links if the user is admin.
                     if @permissions
                         @permissions.each do |p|
                             if p.trip_id == trip.id
                                 if p.permission_type_id == @admin_permission %>
-                                    <%= link_to 'Edit', edit_trip_path(trip) %>
-                                    <%= link_to 'Destroy', trip, method: :delete, data: { confirm: 'Are you sure?' } %>
+                                    <%= link_to image_tag("edit.png", size: "25"), edit_trip_path(trip) %>
+                                    <%= link_to image_tag("delete.png", size: "25", class: "deleteIcon"), trip, method: :delete, data: { confirm: 'Are you sure?' } %>
                                 <% end
 
                                 break

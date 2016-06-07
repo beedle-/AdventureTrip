@@ -18,7 +18,7 @@
 //= require_tree .
 
 $(document).ready(function() {
-    $("#superAdminTag").tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 })
 
 // Hide the invitations clicked by the user.
