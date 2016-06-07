@@ -5,8 +5,8 @@
 <table class="tripTable">
   <thead>
     <tr>
-      <th>Title</th>
       <th>Public</th>
+      <th>Title</th>
       <th>Start date</th>
       <th>End date</th>
       <th>Transport</th>
@@ -17,12 +17,28 @@
   <tbody>
     <% @trips.each do |trip| %>
       <tr>
-        <td><%= trip.title %></td>
-        <td><%= trip.public ? "yes" : "no" %></td>
+        <td><input<%= trip.public ? " checked='checked'" : "" %> onclick="return false;" onkeydown="return false;" type="checkbox" /></td>
+        <td><%= link_to trip.title, trip %></td>
         <td><%= trip.start_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.end_date.strftime("%d.%m.%y %H:%M") %></td>
         <td><%= trip.transport.name %></td>
-        <td><%= link_to 'Show', trip %> <%= link_to 'Edit', edit_trip_path(trip) %> <%= link_to 'Destroy', trip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+            <%
+                # Show the "Edit" and "Destroy" links if the user is admin.
+                if @permissions
+                    @permissions.each do |p|
+                        if p.trip_id == trip.id
+                            if p.permission_type_id == @admin_permission %>
+                                <%= link_to 'Edit', edit_trip_path(trip) %>
+                                <%= link_to 'Destroy', trip, method: :delete, data: { confirm: 'Are you sure?' } %>
+                            <% end
+
+                            break
+                        end
+                    end
+                end
+            %>
+        </td>
       </tr>
     <% end %>
   </tbody>

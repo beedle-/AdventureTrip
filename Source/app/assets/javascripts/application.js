@@ -16,3 +16,14 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+// Hide the invitations clicked by the user.
+function hideInvit(id) {
+    // Get the current number of invitations and substract 1.
+    var numberOfInvits = parseInt($("#nbOfInvits").val()) - 1;
+
+    // Hide the element and update the number of invitations.
+    $("li[name=invitation" + id + "]").fadeOut("fast");
+    $("#btnInvitsText").text("Request to join a trip (" + numberOfInvits + ")");
+    $("#nbOfInvits").val(numberOfInvits);
+}
