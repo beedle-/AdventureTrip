@@ -100,6 +100,10 @@ $stop-padding: 1em;
     text-align: center;
 }
 
+.addRemoveParticipantBtn {
+    font-weight: bold;
+}
+
 .calculateCostsButton {
     margin-left: 20px;
 }
@@ -136,4 +140,8 @@ a#refuse:hover, a#refuse:link{
 .dropdown
 {
     margin-left: 10px;
+}
+
+.adminUser {
+    font-weight: bold;
 }

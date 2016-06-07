@@ -10,6 +10,7 @@ var totalDistance = 0;
 var totalDuration = 0;
 var coordinatesArray = new Array();
 var markersArray = new Array();
+var isLoopAndReadOnly = false;
 
 $(document).ready(function() {
     // Set the map editable if the user is located either on the add or edit trip pages.
@@ -49,6 +50,32 @@ $(document).ready(function() {
     })
 })
 
+// Change the selected participant's status (admin or normal) when the user
+// double-clicks on it.
+// The user itself cannot remove is own admin rights.
+function toggleAdmin(currentUserId) {
+    var element = $("#participantsSelect").find(":selected");
+    var isAdmin = parseInt(element.attr("admin"));
+    var userId = parseInt(element.attr("userId"));
+
+    if (userId == currentUserId && isAdmin) {
+        alert("You cannot set yourself as an usual user!");
+    } else {
+        // If admin the participant become normal.
+        if (isAdmin) {
+            element.attr("admin", 0);
+            element.css("font-weight", "normal");
+            element.val("0-" + userId);
+        }
+        // If normal the participant become admin.
+        else {
+            element.attr("admin", 1);
+            element.css("font-weight", "bold");
+            element.val("1-" + userId);
+        }
+    }
+}
+
 // Add a participant to the trip by moving the selected person from "Users" to
 // "Participants" in the form.
 function addParticipants() {
@@ -61,7 +88,9 @@ function addParticipants() {
 // "Users" in the form.
 function removeParticipants(currentUserId) {
     $("#participantsSelect").find(":selected").each(function() {
-        if ($(this).val() != currentUserId) {
+        var currentVal = $(this).val();
+
+        if (currentVal.substring(2, currentVal.length) != currentUserId) {
             $("#usersSelect").append($(this));
         } else {
             alert("You cannot remove yourself from the trip!");
@@ -131,8 +160,14 @@ function initExistingPoints() {
         // If the last stops equals the first one, we do not add it to the map
         // but check the checkbox instead.
         if (i > 1 && i == ($("input[name^='waypoints']").length / 2) && lat_p == coordinatesArray[0].lat && lon_p == coordinatesArray[0].lng) {
-            $("#arrivalEqualsStart").prop("checked", true);
-            $("input[name^='waypoints[" + (i - 1) + "]']").remove();
+            if ($("#arrivalEqualsStart").length) {
+                $("#arrivalEqualsStart").prop("checked", true);
+                $("input[name^='waypoints[" + (i - 1) + "]']").remove();
+            // If the user accessed the map through the "Show" page there is no
+            // checkbox so we still need to indicate the system there is a loop.
+            } else {
+                isLoopAndReadOnly = true;
+            }
         } else {
             // Add the point in the coordinates array.
             coordinatesArray.push({lat: lat_p, lng: lon_p});
@@ -260,7 +295,7 @@ function calcRoute() {
 
         // Get the trip's arrival, based on whether the user checked or not
         // the checkbox.
-        if ($('#arrivalEqualsStart').is(':checked')) {
+        if ($('#arrivalEqualsStart').is(':checked') || isLoopAndReadOnly) {
             // The last coordinates of the array is not the arrival so we have
             // to add it in the waypoints.
             waypoints.push({

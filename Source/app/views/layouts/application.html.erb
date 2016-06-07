@@ -29,7 +29,15 @@
                 <div style="display: table-row">
                         <div class="header-cell-left" style="width: 100%"><%= link_to "Adventure Trip!", root_path, :class => "title" %></div>
                         <% if user_signed_in? %>
-                            <div class="header-cell-right">You are connected as <b id="user_name"> <%= current_user.user_name %> </b></div>
+                            <div class="header-cell-right">
+                                You are connected as
+                                <b id="user_name">
+                                    <%= current_user.user_name %>
+                                    <% if current_user.super_admin %>
+                                        <span data-toggle="tooltip" data-placement="bottom" id="superAdminTag" title="You are a super-admin.">[SA]</span>
+                                    <% end %>
+                                </b>
+                            </div>
                             <div class="header-cell-right"><%= link_to "My Account", edit_user_registration_path, :class => "my-account-link" %></div>
                             <div class="header-cell-right"><%= link_to "Disconnect", destroy_user_session_path, :method => :delete %></div>
                             <div class="header-cell-right">

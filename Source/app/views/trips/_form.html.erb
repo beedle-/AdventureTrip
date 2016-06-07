@@ -81,7 +81,7 @@
 
         <div role="tabpanel" class="tab-pane fade" id="participants">
             <div class="field">
-              <table>
+              <table width="100%">
                   <tr>
                       <td><%= f.label "Users" %></td>
                       <td></td>
@@ -92,22 +92,37 @@
                           <select class="userSelects" id="usersSelect" multiple="multiple">
                               <%= if @users
                                   @users.each do |user| %>
-                                    <option value="<%= user.id %>"><%= user.user_name + " (" + user.first_name + " " + user.family_name + ")" %></option>
+                                    <option admin="0" ondblclick="changeParticipantStatus(<%= user.id %>)" value="0-<%= user.id %>" userId="<%= user.id %>"><%= user.user_name + " (" + user.first_name + " " + user.family_name + ")" %></option>
                                   <% end
                               end %>
                           </select>
                       </td>
                       <td class="userButtonTd">
-                          <input type="button" onclick="addParticipants()" value=">" /><br/>
-                          <input type="button" onclick="removeParticipants(<%= current_user.id %>)" value="<" />
+                          <input class="addRemoveParticipantBtn" type="button" onclick="addParticipants()" value=">" /><br/>
+                          <input class="addRemoveParticipantBtn" type="button" onclick="removeParticipants(<%= current_user.id %>)" value="<" /><br/>
+                          <input type="button" onclick="toggleAdmin(<%= current_user.id %>)" value="Toggle Admin" />
                       </td>
                       <td class="userSelectsTd">
                           <select class="userSelects" id="participantsSelect" name="users[]" multiple="multiple">
                               <% if @participants
-                                  @participants.each do |participant| %>
-                                      <option value="<%= participant.id %>"><%= participant.user_name + " (" + participant.first_name + " " + participant.family_name + ")" %></option>
-                                  <% end
-                              end %>
+                                  @participants.each do |participant|
+                                      isAdmin = 0
+
+                                      @permissions.each do |p|
+                                          if p.user_id == participant.id
+                                              if p.permission_type_id == @admin_permission
+                                                  isAdmin = 1
+                                              end
+
+                                              break
+                                          end
+                                      end
+                              %>
+
+                              <option admin="<%= isAdmin %>"<%= isAdmin == 1 ? " class=adminUser" : "" %><%= participant.id == current_user.id ? " iscurrent=1" : "" %> id="participant-<%= participant.id %>" ondblclick="changeParticipantStatus(<%= participant.id %>)" value="<%= isAdmin.inspect + "-" + participant.id.inspect %>" userId="<%= participant.id %>"><%= participant.user_name + " (" + participant.first_name + " " + participant.family_name + ")" %></option>
+
+                              <% end
+                          end %>
                           </select>
                       </td>
                   </tr>

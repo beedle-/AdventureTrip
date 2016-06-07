@@ -17,12 +17,17 @@ class TripsController < ApplicationController
 
     # Get public trips and the private trip the connected user has an access on.
     if user_signed_in?
-        sqlRequest = "
-            SELECT *
-            FROM trips AS t
-            WHERE public = 1
-                OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ? AND accepted = 1)"
-        @trips = Trip.find_by_sql [sqlRequest, current_user.id]
+        # Show all trips if the user is super-admin
+        if current_user.super_admin
+            @trips = Trip.all
+        else
+            sqlRequest = "
+                SELECT *
+                FROM trips AS t
+                WHERE public = 1
+                    OR id IN (SELECT p.trip_id FROM permissions AS p WHERE p.user_id = ? AND accepted = 1)"
+            @trips = Trip.find_by_sql [sqlRequest, current_user.id]
+        end
     else
         @trips = Trip.where(public: 1)
     end
@@ -37,8 +42,13 @@ class TripsController < ApplicationController
     @items = @trip.items
     @item = Item.new
 
+    # Get participants of the trip.
     users_ids = Permission.select(:user_id).where(trip_id: @trip.id)
     @users = User.where(:id => users_ids)
+
+    # Get permissions of the trip in order to show admins.
+    @permissions = Permission.where(trip_id: @trip.id)
+    @admin_permission = Permission_type.find_by(permission: "admin").id
 
     @transport = Transport.find(@trip.transport_id).name
   end
@@ -59,6 +69,10 @@ class TripsController < ApplicationController
     @participants = User.where(:id => users_ids)
     # Get users who don't belong to the trip.
     @users = User.where.not(:id => users_ids)
+
+    # Get permissions of the trip in order to show admins.
+    @permissions = Permission.where(trip_id: @trip.id)
+    @admin_permission = Permission_type.find_by(permission: "admin").id
   end
 
   # POST /trips
@@ -68,17 +82,25 @@ class TripsController < ApplicationController
 
     respond_to do |format|
       if @trip.save
-        # Create current user's admin permission on the new created trip.
-        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id, :accepted => 1)
-        adminPerm.save
-
-        # Get the permission's type which represent an usual user.
+        # Get the permission's type which represent an usual user and an admin one.
         permUser = Permission_type.find_by(permission: "user").id
+        permAdmin = Permission_type.find_by(permission: "admin").id
+
+        # Create current user's admin permission on the new created trip.
+        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => permAdmin, :accepted => 1)
+        adminPerm.save
         # Create a "user" permission for each selected users.
         if params["users"]
             params["users"].each do |user|
-              perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
-              perm.save
+                userId = user[2, user.length]
+
+                # We don't add the current user, which is an admin.
+                if userId != String(current_user.id)
+                    currentPermission = user[0] == "1" ? permAdmin : permUser
+
+                    perm = Permission.new(:user_id => userId, :trip_id => @trip.id, :permission_type_id => currentPermission, :accepted => 0)
+                    perm.save
+                end
             end
         end
 
@@ -111,24 +133,30 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1.json
   def update
      #abort(params["users"].inspect)
+
      respond_to do |format|
       if @trip.update(trip_params)
-        # Get the permission's type which represent an usual user.
+        # Get the permission's type which represent an usual user and an admin one.
         permUser = Permission_type.find_by(permission: "user").id
+        permAdmin = Permission_type.find_by(permission: "admin").id
 
         # Remove each current permission.
         Permission.where(trip_id: @trip.id).each do |p|
             p.destroy
         end
         # Create current user's admin permission on the new created trip.
-        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => Permission_type.find_by(permission: "admin").id, :accepted => 1)
+        adminPerm = Permission.new(:user_id => current_user.id, :trip_id => @trip.id, :permission_type_id => permAdmin, :accepted => 1)
         adminPerm.save
         # Create a "user" permission for each selected users.
         if params["users"]
             params["users"].each do |user|
+                userId = user[2, user.length]
+
                 # We don't add the current user, which is an admin.
-                if user != current_user.id.inspect
-                    perm = Permission.new(:user_id => user, :trip_id => @trip.id, :permission_type_id => permUser, :accepted => 0)
+                if userId != String(current_user.id)
+                    currentPermission = user[0] == "1" ? permAdmin : permUser
+
+                    perm = Permission.new(:user_id => userId, :trip_id => @trip.id, :permission_type_id => currentPermission, :accepted => 0)
                     perm.save
                 end
             end
@@ -196,6 +224,6 @@ class TripsController < ApplicationController
         trip_permission = Permission.where(user_id: current_user.id, trip_id: @trip.id).first
         admin_permission = Permission_type.find_by(permission: "admin").id
 
-        redirect_to trips_url, notice: 'You are not admin of this trip!' unless (trip_permission.permission_type_id == admin_permission)
+        redirect_to trips_url, notice: 'You are not admin of this trip!' unless (current_user.super_admin || trip_permission && trip_permission.permission_type_id == admin_permission)
     end
 end

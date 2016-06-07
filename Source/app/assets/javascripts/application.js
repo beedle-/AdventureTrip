@@ -17,6 +17,10 @@
 //= require turbolinks
 //= require_tree .
 
+$(document).ready(function() {
+    $("#superAdminTag").tooltip();
+})
+
 // Hide the invitations clicked by the user.
 function hideInvit(id) {
     // Get the current number of invitations and substract 1.
