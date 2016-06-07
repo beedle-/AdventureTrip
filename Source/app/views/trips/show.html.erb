@@ -17,7 +17,9 @@
   <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
   <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab" id="costs-tab">Costs</a></li>
   <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
-  <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
+  <% if user_signed_in? %>
+    <li role="presentation"><a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">Comments</a></li>
+  <% end %>
 </ul>
 
 <!-- Tab panes -->
@@ -95,29 +97,30 @@
         </p>
     </div>
 
-    <div role="tabpanel" class="tab-pane fade" id="comments">
-        <p>
-          <strong>Comments:</strong>
-        </p>
+    <% if user_signed_in? %>
+        <div role="tabpanel" class="tab-pane fade" id="comments">
+            <p>
+              <strong>Comments:</strong>
+            </p>
 
-        <ul id="comment_list">
-          <% @comments.each do |comment| %>
-            <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
-          <% end %>
-        </ul>
+            <ul id="comment_list">
+              <% @comments.each do |comment| %>
+                <li> <%= comment.text %> | <%= comment.creation_date.strftime("%d-%m-%Y %H:%M:%S") %> | <%= comment.user.user_name %></li>
+              <% end %>
+            </ul>
 
-        <p>
-          <%= form_for(@comment,:remote => true) do |f| %>
-            <strong> Add a comments:</strong> <%= f.text_field :text %> <br>
-            <%= f.hidden_field :user_id, :value => current_user.id %>
-            <%= f.hidden_field :trip_id, :value => @trip.id %>
-            <%= f.submit "Add" %>
-          <% end %>
-        </p>
-    </div>
+            <p>
+              <%= form_for(@comment,:remote => true) do |f| %>
+                <strong> Add a comments:</strong> <%= f.text_field :text %> <br>
+                <%= f.hidden_field :user_id, :value => current_user.id %>
+                <%= f.hidden_field :trip_id, :value => @trip.id %>
+                <%= f.submit "Add" %>
+              <% end %>
+            </p>
+        </div>
+    <% end %>
 </div>
 
 <br/>
 
-<%= link_to 'Edit', edit_trip_path(@trip) %> |
 <%= link_to 'Back', trips_path %>

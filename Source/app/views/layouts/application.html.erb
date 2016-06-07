@@ -26,28 +26,33 @@
 
         <div class="mainContainer" id="mainContainer">
             <div class="header">
-                <%= link_to "Adventure Trip!", root_path, :class => "title" %>
-                <span class="userInfos">
-                    <% if user_signed_in? %>
-                        You are connected as <b id="user_name"> <%= current_user.user_name %> </b>
-                        <%= link_to "Disconnect", destroy_user_session_path, :method => :delete, :class => "disconnect-link" %>
-                        <%= link_to "My Account", edit_user_registration_path %>
-                            <div class = "dropdown pull-right">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Request to join a trip (<%= @invitations.length %>)
-                                <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <% @invitations.each do |i| %>
-                                            <li> <b> <%= i.trip.title %> </b></li>
-                                            <li><%= link_to "Accept", accept_permission_path(i.id), :action => "accept", :remote => true, :id => "accept" %></li>
-                                            <li><%= link_to "Refuse", refuse_permission_path(i.id), :action => "refuse", :remote => true, :id => "refuse" %></li>
-                                    <% end %>
-                                </ul>
+                <div style="display: table-row">
+                        <div class="header-cell-left" style="width: 100%"><%= link_to "Adventure Trip!", root_path, :class => "title" %></div>
+                        <% if user_signed_in? %>
+                            <div class="header-cell-right">You are connected as <b id="user_name"> <%= current_user.user_name %> </b></div>
+                            <div class="header-cell-right"><%= link_to "My Account", edit_user_registration_path, :class => "my-account-link" %></div>
+                            <div class="header-cell-right"><%= link_to "Disconnect", destroy_user_session_path, :method => :delete %></div>
+                            <div class="header-cell-right">
+                                <div class = "dropdown pull-right">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span id="btnInvitsText">Request to join a trip (<%= @invitations.length %>)</span>
+                                    <span class="caret"></span></button>
+                                    <input id="nbOfInvits" type="hidden" value="<%= @invitations.length %>" />
+                                    <ul class="dropdown-menu">
+                                        <% @invitations.each do |i| %>
+                                            <li name="invitation<%= i.id %>"> <b> <%= i.trip.title %> </b></li>
+                                            <li name="invitation<%= i.id %>"><%= link_to "Accept", accept_permission_path(i.id), :action => "accept", :remote => true, :id => "accept", :onclick => 'hideInvit(' + i.id.inspect + ')' %></li>
+                                            <li name="invitation<%= i.id %>"><%= link_to "Refuse", refuse_permission_path(i.id), :action => "refuse", :remote => true, :id => "refuse", :onclick => 'hideInvit(' + i.id.inspect + ')' %></li>
+                                        <% end %>
+                                    </ul>
+                                </div>
                             </div>
-                    <% else %>
-                        Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>
-                        or <%= link_to "Register", new_user_registration_path, :class => "headerLink" %>
-                    <% end %>
-                </span>
+                        <% else %>
+                            <div class="header-cell-right">
+                                Well, hello you! <%= link_to "Sign in", new_user_session_path, :class => "headerLink" %>
+                                or <%= link_to "Register", new_user_registration_path, :class => "headerLink" %>
+                            </div>
+                        <% end %>
+                </div>
             </div>
 
             <div class="contentPanel">

@@ -22,9 +22,10 @@ $footer-height: 44px;
 .header {
     background-color: white;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    display: table;
     margin-left: 50%;
     min-width: 800px;
-    padding: 1.5em 2em 1em;
+    padding: 1.5em 2em;
     position: sticky;
     top: 0;
     transform: translateX(-50%);
@@ -32,7 +33,22 @@ $footer-height: 44px;
     z-index: 10;
 }
 
-.disconnect-link {
+.header-cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.header-cell-left {
+    @extend .header-cell;
+    width: 100%;
+}
+
+.header-cell-right {
+    @extend .header-cell;
+    white-space: nowrap;
+}
+
+.my-account-link {
     margin: 0 1vw;
 }
 
@@ -98,6 +114,7 @@ body {
   font-family: raleway, verdana, arial, helvetica, sans-serif;
   font-size: 13px;
   line-height: 18px;
+  overflow-x: hidden;
 }
 
 a {

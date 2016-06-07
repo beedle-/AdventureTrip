@@ -1,11 +1,21 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: [:show, :edit, :update, :destroy]
   # Allows disconnected users to access the index and show pages only.
-  before_filter:authenticate_user!, except: [:index, :show]
+  before_filter :authenticate_user!, except: [:index, :show]
+  # The user must be admin of the trip in order to edit or delete it.
+  before_filter :check_if_admin_of_trip, only: [:edit, :update, :destroy]
 
   # GET /trips
   # GET /trips.json
   def index
+    # Get permissions in order to show/hide "Edit"/"Destroy" links on each
+    # trip.
+    if user_signed_in?
+        @permissions = Permission.where(user_id: current_user.id)
+        @admin_permission = Permission_type.find_by(permission: "admin").id
+    end
+
+    # Get public trips and the private trip the connected user has an access on.
     if user_signed_in?
         sqlRequest = "
             SELECT *
@@ -178,5 +188,14 @@ class TripsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def trip_params
       params.require(:trip).permit(:title, :description, :public, :start_date, :end_date, :transport_id)
+    end
+
+    # Check if the user if admin of the current trip, otherwise redirect it to
+    # the trips list.
+    def check_if_admin_of_trip
+        trip_permission = Permission.where(user_id: current_user.id, trip_id: @trip.id).first
+        admin_permission = Permission_type.find_by(permission: "admin").id
+
+        redirect_to trips_url, notice: 'You are not admin of this trip!' unless (trip_permission.permission_type_id == admin_permission)
     end
 end
