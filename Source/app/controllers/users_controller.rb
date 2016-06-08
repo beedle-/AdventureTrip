@@ -6,6 +6,8 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+
+    @trips = Trip.where(public: 1)[0 .. 4]
   end
 
   # GET /users/1

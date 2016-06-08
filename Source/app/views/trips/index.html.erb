@@ -25,7 +25,7 @@
         <td>
             <%
                 # Super-admin can edit/remove all trips.
-                if current_user.super_admin %>
+                if current_user && current_user.super_admin %>
                     <%= link_to image_tag("edit.png", size: "25"), edit_trip_path(trip) %>
                     <%= link_to image_tag("delete.png", size: "25", class: "deleteIcon"), trip, method: :delete, data: { confirm: 'Are you sure?' } %>
                 <% else
