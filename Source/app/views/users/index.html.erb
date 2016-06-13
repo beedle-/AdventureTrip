@@ -8,28 +8,28 @@
 
 <h1> Plan your trip ! </h1>
 
-Adventure Trip is a website that allow you to plan your roadtrips with your friends and share it to the world. It facilitates interaction between adventurers and can bring inspiration to the undecided folks who have no idea where to go during their trip.
+Adventure Trip is a website that allows you to plan your roadtrips with your friends and share them to the world. It facilitates interactions between adventurers and can bring inspiration to the undecided folks who have no idea where to go during their trip.
 
-<hr>
+<hr class="containerFluidTopSeparation">
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-4 columns"> 
-      <h4> Plan </h4> 
-      Plan your trip by easily picking stop want to make. Choose a transport mode and automatically get an estimation of time. Add a packing list so you don't forget anything to bring.
+    <div class="col-md-4 columns">
+      <h4><%= image_tag("pin-on-map.png", size: "25", class: "homeIcons") %>Plan</h4>
+      Plan your trip by easily picking stops you want to make. Choose a transport mode and automatically get an estimation of time. Add a packing-list so you won't forget anything to bring.
     </div>
-    <div class= "col-md-4 columns"> 
-      <h4> Invite your friend </h4> 
-      Ask your friends to join your trip. They can leave a message and contribute to the planning by also adding object to the packing list.
+    <div class= "col-md-4 columns">
+      <h4><%= image_tag("men-shaking-hands.png", size: "25", class: "homeIcons") %>Invite your friends</h4>
+      Ask your friends to join your trip. They can leave a message and contribute to the planning by also adding objects to the packing-list.
     </div>
-    <div class= "col-md-4 columns"> 
-      <h4> Share it to the world </h4>
+    <div class= "col-md-4 columns">
+      <h4><%= image_tag("public.png", size: "25", class: "homeIcons") %>Share it to the world</h4>
       Set your trip in public mode and show it to anybody. Inspire future adventurers to go on a trip like you did.
     </div>
   </div>
 </div>
 
-<hr>
+<hr class="containerFluidBottomSeparation">
 
 <h4> Last public trips :</h4>
 
@@ -59,6 +59,7 @@ Adventure Trip is a website that allow you to plan your roadtrips with your frie
     <% end %>
   </tbody>
 </table>
+<br/>
 
 <%= link_to "Take a look at all existing trips...", trips_path %>
 
