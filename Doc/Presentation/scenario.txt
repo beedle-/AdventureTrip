@@ -1,0 +1,49 @@
+1. Get Started
+2. Register
+	jean-mich-le-grand@gmail.com
+	jean-mich
+	Jean-Michel
+	Bron
+	PASSWORD: 12345678
+3. My Account
+4. New Trip
+	Summary
+		Trip with Jean-Michel
+		Venez découvrir du paysage avec Jean-Mich' le vendeur de frites !
+		PUBLIC
+		Dates Osef
+	Route
+		YVERDON > SION > Zurich
+		Cocher la case
+		BICYCLING
+		(~2'200 km)
+	Participants
+		jeromedu32 (ADMIN)
+		cheeseater
+		expert_java
+	Coûts
+		CHF 0.5
+5. Accéder aux détails du trip
+	F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5
+	Présenter les différents onglets
+	Packing List: Vélo, Fromage, Sauce piquante, Spray au poivre
+	Comment: Salut à tous !
+6. Editer
+	Commentaire : Venez découvrir du paysage avec Jean-Mich' le vendeur de moules-frites !
+	Route : retirer le dernier point et remplacer par Berne
+7. Créer un trip privé
+	Summary
+		ULTIMATE V.I.P. YOLOTRIP 2016
+		If you can read this you're a lucky one!
+		PRIVÉ
+	Route
+		LA > Las Vegas > Dallas > Chicago
+		PAS COCHER
+	Participants
+		jeromedu32
+		expert_java
+8. Se connecter avec "jeromedu32"
+9. Accepter les invitations
+10. Modifier "Trip with Jean-Michel"
+11. Essayer de modifier "ULTIMATE" => on peut pas !
+12. SUPER-ADMIN => edri

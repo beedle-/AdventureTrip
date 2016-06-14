@@ -27,7 +27,6 @@
     <li role="presentation"><a href="#route" aria-controls="route" role="tab" data-toggle="tab" id="route-tab">Route</a></li>
     <li role="presentation"><a href="#participants" aria-controls="participants" role="tab" data-toggle="tab">Participants</a></li>
     <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab" id="costs-tab">Costs</a></li>
-    <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing List</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -136,23 +135,6 @@
             <input disabled="disabled" id="costPerKm" min="0" name="costPerKm" onchange="calculateCosts()" placeholder="0.00" step="0.05" type="number"> CHF
             <input class="calculateCostsButton" disabled="disabled" id="calculateCostsBtn" onclick="calculateCosts()" type="button" value="Calculate costs!" /><br/>
             <div class="tripCosts"><u>Costs:</u><br/><div class="costs" id="tripCosts">-</div></div>
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="packing">
-          <p>
-            <strong>Packing list:</strong>
-          </p>
-
-          <ul id="item_list">
-            <% @items.each do |item| %>
-              <li>
-                <%= item.name %>
-                <%= link_to 'Edit', edit_item_path(item) %>
-                <%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete, :remote => true, :class => "item" %>
-              </li>
-            <% end %>
-          </ul>
-
         </div>
     </div>
 

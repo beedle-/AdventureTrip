@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160606203044) do
+ActiveRecord::Schema.define(version: 20160614103427) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "text",          limit: 4294967295, null: false
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(version: 20160606203044) do
 
   create_table "stops", force: :cascade do |t|
     t.string  "title",    limit: 255,                           null: false
-    t.decimal "loc_lon",              precision: 17, scale: 15, null: false
-    t.decimal "loc_lat",              precision: 17, scale: 15, null: false
+    t.decimal "loc_lon",              precision: 18, scale: 15, null: false
+    t.decimal "loc_lat",              precision: 18, scale: 15, null: false
     t.integer "trip_id",  limit: 4,                             null: false
     t.integer "etape_nb", limit: 4,                             null: false
   end
